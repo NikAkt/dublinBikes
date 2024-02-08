@@ -1,4 +1,5 @@
 import requests
+import json
 
 def fetch_weather_data(city_name, weather_api_key):
     try:
@@ -29,15 +30,13 @@ weather_data = fetch_weather_data(city_name, weather_api_key)
 bike_data=fetch_bike_data(city_name, bike_api_key)
 
 if weather_data:
-    # Handle the data
-    print(weather_data)
+    with open('weather_data.json', 'w') as outfileweather:
+        json.dump(weather_data, outfileweather)
 else:
-    # Handle any errors
     print("Failed to fetch weather data.")
 
 if bike_data:
-    # Handle the data
-    print(bike_data)
+    with open('bike_data.json', 'w') as outfilebikes:
+        json.dump(bike_data, outfilebikes)
 else:
-    # Handle any errors
-    print("Failed to fetch weather data.")
+    print("Failed to fetch bike data.")
