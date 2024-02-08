@@ -3,7 +3,7 @@ import json
 
 def fetch_weather_data(city_name, weather_api_key):
     try:
-        response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?q={city_name}&appid={weather_api_key}")
+        response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={weather_api_key}")
         response.raise_for_status()  # Raise an error for bad status codes
         weather_data = response.json()
         return weather_data
@@ -25,6 +25,9 @@ def fetch_bike_data(city_name, bike_api_key):
 city_name = 'Dublin'  # Replace with the city name you want to fetch data for
 weather_api_key = '43aeecf5b252d71ca98d7f4dd8aaee24'  # Replace with your OpenWeather API key
 bike_api_key = '626c8de20316723c1526eed9a83479c9dd13f945'  # Replace with your OpenWeather API key
+time=1707388263 #used Thu Feb 08 2024 10:31:03 GMT+0000 as a placeholder timestamp. Go to https://www.unixtimestamp.com for more info. This uses UNIX timestamp
+lat='53.2734' #Dublin's latitude
+lon='-7.77832031' #Dublin's longitude
 
 weather_data = fetch_weather_data(city_name, weather_api_key)
 bike_data=fetch_bike_data(city_name, bike_api_key)
