@@ -1,5 +1,4 @@
 import sqlalchemy
-import pymysql
 
 def test_db_connection():
     # Replace 'your_database_url' with your actual database URL
@@ -18,7 +17,7 @@ def test_db_connection():
             print(row)
 
         print("Database connection successful.")
-        
+
         # Close the connection
         connection.close()
 
