@@ -3,7 +3,7 @@ import pymysql
 
 def test_db_connection():
     # Replace 'your_database_url' with your actual database URL
-    db_url = 'mysql+pymysql://admin:widzEh-kuwriz-0menki@se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com:3306/dbikes'
+    db_url = 'mysql://admin:widzEh-kuwriz-0menki@se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com:3306/dbikes'
 
     try:
         # Establish a connection to the database
