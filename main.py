@@ -46,18 +46,15 @@ def get_db_config():
     return config
 
 
-
-# Now you can use these variables in your database connection code
-
 def main():
     city_name = 'Dublin'
     weather_api_key = '43aeecf5b252d71ca98d7f4dd8aaee24'
     bike_api_key = '626c8de20316723c1526eed9a83479c9dd13f945'
-    time=1707388263 #used Thu Feb 08 2024 10:31:03 GMT+0000 as a placeholder timestamp. Go to https://www.unixtimestamp.com for more info. This uses UNIX timestamp
     lat='53.2734' #Dublin's latitude
     lon='-7.77832031' #Dublin's longitude
     website = "https://api.jcdecaux.com/vls/v1/stations/"
-    
+    time = int(datetime.datetime.now().timestamp())
+
     config = get_db_config()
     dbuser = config["dbuser"]
     dbpass = config["dbpass"]
@@ -66,10 +63,10 @@ def main():
 
     engine = create_engine("mysql+pymysql://{0}:{1}@{2}".format(dbuser, dbpass, dburl), echo=True)
 
-
     stations=fetch_stations(website,bike_api_key,city_name,engine)
     weather_data = fetch_weather_data(city_name, weather_api_key,lat,lon)
     bike_data=fetch_bike_data(city_name, bike_api_key)
+    
     if weather_data:
         with open('weather_data.json', 'w') as outfileweather:
             json.dump(weather_data, outfileweather)
