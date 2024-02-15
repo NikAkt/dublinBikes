@@ -39,9 +39,15 @@ def stations_to_db(text,engine):
     connection = pymysql.connect(host=host,user=user,password=password,db=db)
     with connection:
         with connection.cursor() as cursor:
+            sql='TRUNCATE TABLE station;'
+            cursor.execute(sql)
+            connection.commit()
+            sql='ALTER TABLE station ADD PRIMARY KEY (number);'
+            cursor.execute(sql)
+            connection.commit()
             for station in stations:
                     print(station)
-                    vals=(station.get('address'),int(station.get('banking')),station.get('bike_stands'),int(station.get('bonus')),station.get('contract_name'),station.get('name'),station.get('number'),station.get('position').get('lat'),station.get('position').get('lng'),station.get('status'))
+                    vals=(station.get('address'),int(station.get('banking')),station.get('bike_stands'),station.get('contract_name'),station.get('name'),station.get('number'),station.get('position').get('lat'),station.get('position').get('lng'),station.get('status'),int(station.get('bonus')))
                     cursor.execute("insert into station values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",vals)
         connection.commit()
     stations=json.loads(text)
