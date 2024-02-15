@@ -67,7 +67,6 @@ def main():
     time = int(datetime.datetime.now().timestamp())
 
     #only needs to run once
-    db_url = 'mysql://admin:widzEh-kuwriz-0menki@se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com:3306/dbikes'
     host='se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com'
     user='admin'
     password='widzEh-kuwriz-0menki'
