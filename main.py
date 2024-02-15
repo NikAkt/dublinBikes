@@ -77,7 +77,7 @@ def main():
     engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(user, password, host,port,db), echo=True)
 
     r = requests.get(website, params={"apiKey": bike_api_key, "contract": city_name})
-    stations_to_db(r.text, engine)
+    # stations_to_db(r.text, engine)
 
     # weather_data = fetch_weather_data(city_name, weather_api_key,lat,lon)
     # bike_data=fetch_bike_data(city_name, bike_api_key)
