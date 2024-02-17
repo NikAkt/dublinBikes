@@ -27,36 +27,6 @@ def fetch_bike_data(city_name, bike_api_key):
         print(f"Error fetching weather data: {e}")
         return None
     
-def stations_to_db(text,engine):
-    #only needs to run once
-    host='se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com'
-    user='admin'
-    password='widzEh-kuwriz-0menki'
-    db='dbikes'
-    print("stations_to_db")
-
-    stations = json.loads(text)
-    connection = pymysql.connect(host=host,user=user,password=password,db=db)
-    with connection:
-        with connection.cursor() as cursor:
-            sql='TRUNCATE TABLE station;'
-            cursor.execute(sql)
-            connection.commit()
-            # sql='ALTER TABLE station ADD PRIMARY KEY (number);'
-            # cursor.execute(sql)
-            # connection.commit()
-            for station in stations:
-                    print(station)
-                    vals=(station.get('address'),int(station.get('banking')),station.get('bike_stands'),station.get('contract_name'),station.get('name'),station.get('number'),station.get('position').get('lat'),station.get('position').get('lng'),station.get('status'),int(station.get('bonus')))
-                    cursor.execute("insert into station values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",vals)
-        connection.commit()
-
-def get_db_config():
-    with open("config.json", "r") as f:
-        config = json.load(f)
-    return config
-
-
 def main():
     city_name = 'Dublin'
     weather_api_key = '43aeecf5b252d71ca98d7f4dd8aaee24'
@@ -66,7 +36,6 @@ def main():
     website = "https://api.jcdecaux.com/vls/v1/stations/"
     time = int(datetime.datetime.now().timestamp())
 
-    #only needs to run once
     host='se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com'
     user='admin'
     password='widzEh-kuwriz-0menki'
@@ -77,8 +46,6 @@ def main():
     engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(user, password, host,port,db), echo=True)
 
     r = requests.get(website, params={"apiKey": bike_api_key, "contract": city_name})
-    # stations_to_db(r.text, engine)
-
     # weather_data = fetch_weather_data(city_name, weather_api_key,lat,lon)
     # bike_data=fetch_bike_data(city_name, bike_api_key)
     
