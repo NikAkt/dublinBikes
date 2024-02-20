@@ -1,0 +1,275 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+body{
+    margin: 0; 
+      padding: 0;
+}
+
+header{
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    position: relative;
+}
+
+h1 {
+    text-align: left;
+    color: rgb(23, 22, 22);
+    padding: 20px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+h2{
+    font-size: small;
+    text-align: left;
+    padding-top: 2%;
+    padding-bottom: 2%;
+}
+/*WEATHER DROPDOWN, ON HOVER, AND CONTENT */
+/*add animation arrow on click*/
+#weatherButton{
+    display:flex;
+    align-items: center;
+    border-radius: .5em;
+    border: 2px #ffffff solid;
+    width: 15%;
+    background-color: #f3f3f3;
+    font-size: 120%;
+    font-weight: 500;
+    box-shadow: 0 0.5em  1em rgba(0, 0, 0, 0.2);
+    position: absolute;
+    top: 15%;
+    right: 2%;
+    height: 70%;
+    max-height: 70%;
+    overflow: hidden;
+    transition: background-color 0.3s ease;
+}
+
+/*temporary icon*/
+#weatherButton img {
+    max-height: 90%;
+    margin: 2%;
+    margin-left: 5%;
+    float: left;
+    
+}
+
+#tempIcon {
+    height: 60%;
+    margin-right: 0;
+    float: left;
+}
+#weatherButton p {
+    margin: 0; /* Remove default margin for the paragraph */
+    flex: 1;
+    float: left; /* Allow the temperature to take the remaining space */
+}
+.active, #weatherButton:hover{
+    background-color: #b2b2b2;
+    cursor: pointer;
+}
+#dropdownArrow{
+    float: right;
+    height: 30%;
+    display: flex;
+    margin-right: 10%;
+    padding-right: 2%;
+}
+#weatherContent {
+    border-radius: .5em;
+    padding: .2em .5em;
+
+    display: none;
+    overflow: hidden;
+    background-color:  #f1f1f1;
+    width: 15%;
+    position: absolute;
+    top: calc(15% + 70%);
+    right: 2%;
+    box-shadow: 0 0.5em  1em rgba(0, 0, 0, 0.2);
+ 
+}
+
+/*Temporary Map Image*/
+#temporaryMap{
+    width: 100%;
+}
+
+
+#mainDiv{
+  
+    border: 2px solid black;
+    height: 78%;
+    align-items: center;
+    border-radius: .5em;
+    width: fit-content;
+    top: 17%;
+    overflow: hidden;
+    left: 3%;
+    position: fixed;
+    height: 78%;
+    max-height: 78%;
+    background-color: #ffffff;
+
+}
+.tabs {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 400px;
+    font-family: sans-serif;
+    width: 300px;
+  }
+  
+  .tabs__label {
+    font-size: medium;
+    cursor: pointer;
+    border-bottom: solid black 2px;
+    width: 50%;
+    height: 40px; /* Adjust this height as needed */
+    padding: 5px;
+    color: #696969;
+    text-align: center;
+    padding-top: 10px;
+  }
+  
+  .tabs__radio {
+    display: none;
+  }
+  
+  .tabs__content {
+    order: 1;
+    width: 100%;
+    margin: 10px;
+    line-height: 1.5;
+    font-size: 0.7em;
+    display: none;
+  }
+  
+  .tabs__radio:checked + .tabs__label {
+    background-color: #d5eee9;
+    color: black;
+  
+    
+  }
+  
+  .tabs__radio:checked + .tabs__label + .tabs__content {
+    display: initial;
+  }
+  
+  .tabs__content h1{
+    text-align: center;
+    color: rgb(23, 22, 22);
+    font-size: medium;
+    padding: 5px;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  }
+
+
+#dateInput{
+    width: 70%; 
+    margin-top: 3%;
+    margin-left: 15%;
+}
+
+  .active, #dateInput:hover {
+    cursor: pointer;
+}
+/*for choosing starting station*/ 
+#startSelector{
+    margin-top: 2%;
+ 
+}
+
+
+#toggle{
+    display: flex;
+    align-items: center;
+    margin-top: 10%;
+    margin-bottom: 10%;
+}
+  /* The slider - taken from W3 Schools */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 30px;
+    height: 17px;
+    margin-top: 10px;
+    margin-left: 90px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 10px;
+    width: 10px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: #2196F3;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(13px);
+  }
+  
+  /* Rounded sliders */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+
+
+#toggleText {
+    font-size: 11px;
+    color: #333; 
+    margin-left: 2%;
+    margin-top: 3%;
+    font-weight: bold;
+}
+
+#electricBikeIcon{
+    width: 7%;
+    margin-left: 2%;
+    margin-top: 3%;
+}
+
+
+#spaceSelector label{
+    margin-right: 10px;
+}
