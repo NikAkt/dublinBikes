@@ -44,47 +44,38 @@ def availability_to_db(text,engine):
         connection.commit()
     return
 
-def weather_to_db(text,engine):
+def weather_to_db(text, engine):
     """
     Add weather data to the database
     """
-    # host = 'se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com'
-    # user = 'admin'
-    # password = 'widzEh-kuwriz-0menki'
-    # db = 'dbikes'
-    # print("availability_to_db")
-
-    # initailize timezone
-    tz=pytz.timezone('Europe/Dublin')
+    tz = pytz.timezone('Europe/Dublin')
     curr = datetime.datetime.now(tz=tz)
 
-    #read the request API context and store them
     weather = json.loads(text)
-    
-    # connection = pymysql.connect(host=host, user=user, password=password, db=db)
-    # with connection:
-    #     with connection.cursor() as cursor:
+    vals = (
+        float(weather['coord']['lon']),
+        float(weather['coord']['lat']),
+        int(weather['weather'][0]['id']),
+        float(weather['main']['temp']),
+        float(weather['main']['feels_like']),
+        weather['weather'][0]['description'],
+        float(weather['wind']['speed']),
+        int(weather['main']['humidity']),
+        curr  # Added the current time to the tuple
+    )
 
-    """""
-    try to use engine to create connection
-    """""
-            try:
-               # set up the timezone 
-                for station in stations:
-                    try:
-                        last_update=datetime.datetime.fromtimestamp(int(station.get("last_update")) / 1000).astimezone(tz)
-                    except TypeError:
-                        print(station)
-                        last_update = "0000-00-00 00:00:00"
-                    # read the dictionary 
-                    vals = (int(station.get("number")), int(station.get("available_bikes")), int(station.get("available_bike_stands")), last_update, str(curr.strftime('%Y-%m-%d %H:%M:%S')))
-                    #insert them into table
-                    cursor.execute("INSERT INTO `dbikes`.`availability` values(%s,%s,%s,%s,%s)", vals)
-            except pymysql.Error as e:
-                print(f"Error executing SQL query: {e}")
-                connection.rollback()
-        connection.commit()
-    return
+    insert_stmt = """
+    INSERT INTO dbikes.weather 
+    (lon, lat, weather_id, temp, feels_like, weather_description, wind_speed, humidity, timestamp) 
+    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+
+    with engine.connect() as connection:
+        try:
+            connection.execute(insert_stmt, vals)  # Using the updated vals tuple
+        except Exception as e:
+            print(f"Error executing SQL query: {e}")
+
 
 def main():
     """
@@ -138,11 +129,11 @@ def event_log(event):
         file = open("event_log.txt", "w")
     except FileExistsError:
         file = open("event_log.txt", "a")
-    finally:
-        "Event \t"+ file.write(str(event) + "\t captured at \t" + str(curr.strftime('%Y-%m-%d %H:%M:%S')) + "\n")
-        file.close()
-    pass
 
+    # Corrected the string formatting and write operation
+    event_str = "Event \t" + str(event) + "\t captured at \t" + str(curr.strftime('%Y-%m-%d %H:%M:%S')) + "\n"
+    file.write(event_str)
+    file.close()
 
 if __name__== "__main__":
     main()
