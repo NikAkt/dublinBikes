@@ -19,6 +19,11 @@ def weather_to_db(text, engine):
 
 
     weather = json.loads(text)
+
+    # set up timezone 
+    tz=pytz.timezone('Europe/Dublin')
+    curr = datetime.datetime.now(tz=tz)
+
     connection = pymysql.connect(host=host, user=user, password=password, db=db)
     with connection:
         with connection.cursor() as cursor:
@@ -30,8 +35,9 @@ def weather_to_db(text, engine):
                         float(weather['main']['feels_like']),
                         weather['weather'][0]['description'],
                         float(weather['wind']['speed']),
-                        int(weather['main']['humidity']))
-                cursor.execute("INSERT INTO `dbikes`.`weather` values(%s,%s,%s,%s,%s,%s,%s,%s)", vals)
+                        int(weather['main']['humidity']),
+                        str(curr.strftime('%Y-%m-%d %H:%M:%S')))
+                cursor.execute("INSERT INTO `dbikes`.`weather` values(%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
             except Exception as e:
                 print(f"Error executing SQL query: {e}")
                 connection.rollback()
