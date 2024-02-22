@@ -5,7 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dublin Bikes Data</title>
-    <script src="/static/test2.js" defer></script>
+    <script src="../static/test2.js" defer></script>
+   
 </head>
 <body>
     <header>
@@ -23,14 +24,16 @@
             
         </div>
     </header>
-    <div id="map"></div>
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
     <div id="mainDiv">
     <div class="tabs">
         <input type="radio" class="tabs__radio" name="tabs" id="journeyPlanner" checked>
         <label for="journeyPlanner" class="tabs__label" >Journey Planner</label>
         <div class="tabs__content">
             <h1>Plan Your Journey</h1>
-            <input type="date" id="dateInput" name="dateInput">
+            <input type="datetime-local" id="dateInput" name="dateInput">
             <h2> Starting Point</h2>
             <form>
                 <label for="locationCheckBox">Use My Current Location</label>
@@ -89,6 +92,6 @@
     </div>
 
 
-
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&callback=initMap"></script>
 </body>
 </html>

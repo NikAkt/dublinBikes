@@ -273,3 +273,15 @@ h2{
 #spaceSelector label{
     margin-right: 10px;
 }
+
+#map-container {
+  width: 100%; /* Set the width to 100% of the viewport width */
+  height: 70vh; /* Set the height to 70% of the viewport height, adjust as needed */
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+#map {
+  height: 120%; /* Set the map height to 100% of the parent container */
+}

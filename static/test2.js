@@ -1,18 +1,38 @@
-if (typeof gmap_key !== 'undefined' && gmap_key) {
-  const script = document.createElement('script');
-  script.src = `https://maps.googleapis.com/maps/api/js?key=${gmap_key}&loading=async&callback=initMap`;
-  script.async = true;
-  document.head.appendChild(script);
-} else {
-  console.error("Google Maps API key is not available.");
-}
+// if (typeof gmap_key !== 'undefined' && gmap_key) {
+//   const script = document.createElement('script');
+//   script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&loading=async&callback=initMap`;
+//   script.async = true;
+//   document.head.appendChild(script);
+// } else {
+//   console.error("Google Maps API key is not available.");
+// }
+document.addEventListener('DOMContentLoaded', function () {
+  initMap();
+});
 
-function initMap() {
-  // Create a map centered at a specific location
+async function initMap() {
   var map = new google.maps.Map(document.getElementById('map'), {
       center: { lat: -34.397, lng: 150.644 },
       zoom: 8
   });
+
+  const mapDiv = document.getElementById('map');
+  const mapCenter = { lat: 53.3483031, lng: -6.2637067 };
+
+  try {
+      const { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
+      if (mapDiv) {
+          map = new google.maps.Map(mapDiv, {
+              center: mapCenter,
+              zoom: 13
+          });
+      }
+  } catch (error) {
+      console.error('Error importing marker library:', error);
+  }
+
+
+
 
 // collapsable dropdown for weather info 
 var weatherButton = document.getElementById("weatherButton");
