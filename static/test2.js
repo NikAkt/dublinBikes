@@ -1,11 +1,4 @@
-// if (typeof gmap_key !== 'undefined' && gmap_key) {
-//   const script = document.createElement('script');
-//   script.src = `https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&loading=async&callback=initMap`;
-//   script.async = true;
-//   document.head.appendChild(script);
-// } else {
-//   console.error("Google Maps API key is not available.");
-// }
+
 document.addEventListener('DOMContentLoaded', function () {
   initMap();
 });
@@ -51,15 +44,17 @@ if (weatherButton){
     }
 
 //get todays date
-function getCurrentDate() {
+function getCurrentDateTime() {
   const today = new Date();
   const year = today.getFullYear();
   const month = String(today.getMonth() + 1).padStart(2, '0'); // Months are 0-based
   const day = String(today.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  const hours = String(today.getHours()).padStart(2, '0');
+  const minutes = String(today.getMinutes()).padStart(2, '0');
+  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
 
 
 document.addEventListener('DOMContentLoaded', function() {
-  document.getElementById('dateInput').value = getCurrentDate();
+  document.getElementById('dateTimeInput').value = getCurrentDateTime();
 })}
