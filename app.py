@@ -63,10 +63,19 @@ def sql_query(query):
     return rows
 
 query = """
-    SELECT availability.number, availability.available_bikes,availability.available_bike_stands,station.position_lat, station.position_lng, station.name, address, available_bikes, available_bike_stands, MAX(db_a.last_update) AS last_update
-    FROM dublin_bikes.station db_s
-    INNER JOIN dublin_bikes.availability db_a ON db_s.number = db_a.number
-    GROUP BY db_a.number;
+    SELECT
+    s.address,
+    s.bike_stands,
+    s.name,
+    s.number,
+    s.position_lat,
+    s.position_lng,
+    a.available_bikes,
+    a.available_bike_stands
+FROM
+    station s
+JOIN
+    availability a ON s.number = a.number;
 """
 
 result = sql_query(query)
