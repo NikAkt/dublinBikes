@@ -5,6 +5,8 @@ from sqlalchemy import create_engine
 import pymysql
 import datetime
 import json
+from pymysql.cursors import DictCursor
+
 
 load_dotenv()
 app = Flask("__name__", template_folder='templates', static_folder='static')
@@ -27,7 +29,7 @@ def get_stations():
     password = 'widzEh-kuwriz-0menki'
     db = 'dbikes'
     stations=[]
-    connection = pymysql.connect(host=host, user=user, password=password, db=db)
+    connection = pymysql.connect(host=host, user=user, password=password, db=db,cursorclass=DictCursor)
     with connection:
         with connection.cursor() as cursor:
             cursor.execute("SELECT * FROM station;")
