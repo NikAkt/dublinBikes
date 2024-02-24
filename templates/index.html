@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="../static/style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dublin Bikes Data</title>
+    <script src="../static/test2.js" defer></script>
+   
+</head>
+<body>
+    <header>
+        <h1>dublinBikes</h1>
+        <!-- ADD collapsable for weather-->
+        <button type="button" id="weatherButton">
+            <img id="tempIcon" src="../static/Images/tempIcon.png" alt="Temperature Icon">
+<!-- temporary icon elements for prototype-->
+            <p>4°C</p>
+            <img src="../static/Images/cloudIcon.png" alt="Weather Icon">
+            <img src="../static/Images/dropdown.png" id="dropdownArrow" alt="Dropdown Arrow">
+        </button> 
+        <div id="weatherContent">
+            <label>Here is the weather info</label>
+            
+        </div>
+    </header>
+    <div id="map-container">
+        <div id="map"></div>
+    </div>
+    <div id="mainDiv">
+    <div class="tabs">
+        <input type="radio" class="tabs__radio" name="tabs" id="journeyPlanner" checked>
+        <label for="journeyPlanner" class="tabs__label" >Journey Planner</label>
+        <div class="tabs__content">
+            <h1>Plan Your Journey</h1>
+            <input type="datetime-local" id="dateInput" name="dateInput">
+            <h2> Starting Point</h2>
+            <form>
+                <label for="locationCheckBox">Use My Current Location</label>
+                <input type="checkbox" id="locationCheckBox" name="locationCheckBox"/>
+            </form>
+            <div id="startSelector">
+                <select required>
+                    <option value="">Select a Station</option>
+                    <option value="station1">Station 1</option>
+                    <option value="station2">Station 2</option>
+                </select>
+            </div>
+            <h2> Destination </h2>  
+            <div id="startSelector">
+                <select required>
+                    <option value="">Select a Station</option>
+                    <option value="station1">Station 1</option>
+                    <option value="station2">Station 2</option>
+                </select>
+            </div>
+            <div>
+                <div id="toggle">
+                    <span id="toggleText">Electric Bike</span>
+                    <img src="../static/Images/electricBike.png" alt="Electric Bike Icon" id="electricBikeIcon">
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider round"></span>
+                    </label>
+                    
+                </div>
+            </div>
+            <div id="spaceSelector">
+                <label for="spaceSelector">I'm looking for a </label>
+                <select>
+                    <option value="0">Bike</option>
+                    <option value="1">Empty Bike Space</option>
+                </select>
+                
+            </div>
+            
+
+        </div>
+        <input type="radio" class="tabs__radio" name="tabs" id="statsTab">
+        <label for="statsTab" class="tabs__label" >Stats</label>
+
+
+        <div class="tabs__content">
+            <h1>Here are some stats :P</h1>
+    
+        </div>
+        
+      </div>
+        
+    </div>
+
+    </div>
+
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&callback=initMap"></script>
+</body>
+</html>
