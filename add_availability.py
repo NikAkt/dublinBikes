@@ -3,10 +3,9 @@ import requests
 import traceback
 import datetime
 import pymysql
-from sqlalchemy import create_engine
 import pytz
 
-def availability_to_db(text,engine):
+def availability_to_db(text):
     """
     Add availability data to the database
     Should run every 5 minutes
@@ -49,52 +48,28 @@ def availability_to_db(text,engine):
 
 def main():
     """
-    SQL login info.
-    """
-    host='se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com'
-    user='admin'
-    password='widzEh-kuwriz-0menki'
-    db='dbikes'
-    port='3306'
-
-    """
     bike API info.
     """
     city_name = 'Dublin'
     bike_api_key = '626c8de20316723c1526eed9a83479c9dd13f945'
     website_bike = "https://api.jcdecaux.com/vls/v1/stations/"
 
-
-    engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(user, password, host, port, db), echo=True)
-
     try:
         r = requests.get(website_bike, params={"apiKey": bike_api_key, "contract": city_name})
-        availability_to_db(r.text, engine)
-
-
-    except AttributeError as event:
-        print(traceback.format_exc() + "\n ERROR:The GET request has not been generated correctly")
-        event_log(event)
-        print("got to here")
+        availability_to_db(r.text)
     except Exception as event:
-        print(traceback.format_exc() + "\n ERROR: An unknown error has occured")
+        print(traceback.format_exc() + "\n ERROR: An error has occured")
         event_log(event)
 
 def event_log(event):
     """
     Event log for errors etc.
     """
+def event_log(event):
     curr = datetime.datetime.utcnow()
-
-    try:
-        file = open("event_log.txt", "w")
-    except FileExistsError:
-        file = open("event_log.txt", "a")
-
-    # Corrected the string formatting and write operation
     event_str = "Event \t" + str(event) + "\t captured at \t" + str(curr.strftime('%Y-%m-%d %H:%M:%S')) + "\n"
-    file.write(event_str)
-    file.close()
+    with open("event_log.txt", "a") as file:
+        file.write(event_str)
 
 if __name__== "__main__":
     main()

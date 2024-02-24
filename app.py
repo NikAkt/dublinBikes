@@ -1,10 +1,7 @@
 from flask import Flask, render_template, jsonify
 from dotenv import load_dotenv
 import os
-from sqlalchemy import create_engine
 import pymysql
-import datetime
-import json
 from pymysql.cursors import DictCursor
 
 

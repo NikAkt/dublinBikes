@@ -1,9 +1,8 @@
 import requests
 import json
 import pymysql
-from sqlalchemy import create_engine
 
-def stations_to_db(text, engine):
+def stations_to_db(text):
     """
     Add stations to the database
     This needs to be run only once
@@ -24,9 +23,9 @@ def stations_to_db(text, engine):
     with connection:
         with connection.cursor() as cursor:
             try:
-                sql = 'TRUNCATE TABLE station;'
-                cursor.execute(sql)
-                connection.commit()
+                # sql = 'TRUNCATE TABLE station;'
+                # cursor.execute(sql)
+                # connection.commit()
                 # sql='ALTER TABLE station ADD PRIMARY KEY (number);'
                 # cursor.execute(sql)
                 # connection.commit()
@@ -55,16 +54,10 @@ def main():
     city_name = 'Dublin'
     bike_api_key = '626c8de20316723c1526eed9a83479c9dd13f945'
     website = "https://api.jcdecaux.com/vls/v1/stations/"
-    host = 'se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com'
-    user = 'admin'
-    password = 'widzEh-kuwriz-0menki'
-    db = 'dbikes'
-    port = '3306'
     r = requests.get(website, params={"apiKey": bike_api_key, "contract": city_name})
-    engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(user, password, host, port, db), echo=True)
     if r.status_code == 200:
         try:
-            stations_to_db(r.text, engine)
+            stations_to_db(r.text)
         except Exception as e:
             print(f"Error adding stations to the database: {e}")
     else:

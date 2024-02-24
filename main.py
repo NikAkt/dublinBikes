@@ -7,6 +7,7 @@ import time
 import pytz
 import pymysql
 
+#not sure if this whole thing runs. We might have to remove it
 def fetch_weather_data(city_name, weather_api_key,lat,lon):
     try:
         response = requests.get(f"https://api.openweathermap.org/data/2.5/weather?lat={lat}&lon={lon}&appid={weather_api_key}")
