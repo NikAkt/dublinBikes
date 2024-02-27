@@ -4,9 +4,12 @@ let infoWindow;
 // fetching the data from the api
 async function fetchDublinBikesData() {
   try {
-      const response = await fetch('https://api.jcdecaux.com/vls/v1/stations?contract=Dublin&apiKey=626c8de20316723c1526eed9a83479c9dd13f945');
-      const data = await response.json();
-      return data;
+      const response=await fetch('/stations');
+      const data=await response.json();
+      // console.log(data);
+      realdata=data.station;
+      console.log(realdata);
+      return realdata;
   } catch (error) {
       console.error('Error fetching Dublin Bikes data:', error);
       return null;
@@ -14,9 +17,10 @@ async function fetchDublinBikesData() {
 }
 //creating the markers using bike data
 function createMarkers(map, bikeStations) {
+  console.log("hello",bikeStations[0])
   bikeStations.forEach(station => {
     const marker = new google.maps.Marker({
-      position: station.position,
+      position: {lat:station.position_lat, lng:station.position_lng},
       map: map,
       title: station.name,  
     });
@@ -29,14 +33,11 @@ function createMarkers(map, bikeStations) {
       });
       infoWindow.open(map, marker);
   });
-
   });
-  
 }
 //function to update the markers every 5 mins
 async function updateMarkers() {
   const updatedData = await fetchDublinBikesData();
-
   if (updatedData !== null) {
       bikeStations = updatedData;
       createMarkers(map, bikeStations);
@@ -61,7 +62,7 @@ async function initMap() {
   const mapCenter = { lat: 53.3483031, lng: -6.2637067 };
 
   try {
-      const { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
+      // const { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
       if (mapDiv) {
           map = new google.maps.Map(mapDiv, {
               center: mapCenter,
@@ -69,6 +70,7 @@ async function initMap() {
           });
       }
       bikeStations = await fetchDublinBikesData();
+      console.log(bikeStations)
       
 // Create markers using the data
         createMarkers(map, bikeStations);
@@ -81,8 +83,6 @@ async function initMap() {
   } catch (error) {
       console.error('Error importing marker library:', error);
   }
-
-
 
 // collapsable dropdown for weather info 
 var weatherButton = document.getElementById("weatherButton");
