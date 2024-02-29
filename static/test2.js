@@ -19,10 +19,25 @@ async function fetchDublinBikesData() {
 function createMarkers(map, bikeStations) {
   console.log("hello",bikeStations[0])
   bikeStations.forEach(station => {
+    if (station.available_bikes === 0) {
+      markerColor = 'red';
+    } else if (station.available_bikes < 5) {
+      markerColor = 'orange';
+    } else {
+      markerColor = 'blue';
+    }
     const marker = new google.maps.Marker({
       position: {lat:station.position_lat, lng:station.position_lng},
       map: map,
-      title: station.name,  
+      title: station.name,
+      icon: {
+        path: google.maps.SymbolPath.CIRCLE,
+        fillColor: markerColor,
+        fillOpacity: 1,
+        strokeColor: '#FFFFFF', // Border color
+        strokeWeight: 1, // Border width
+        scale: 8 // Size of the marker
+      }
     });
     marker.addListener('click', () => {
       if (infoWindow) {
