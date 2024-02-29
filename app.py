@@ -72,6 +72,8 @@ def get_availability():
                 row_count+=1
             print("==============================================")
             print("Row Count: ",row_count)
+            print("==============================================")
+
             return jsonify(availability=availability)
 
 if __name__ == "__main__":
