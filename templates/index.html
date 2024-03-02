@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="../static/style.css" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" >
+    <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dublin Bikes Data</title>
-    <script src="../static/test2.js" defer></script>
-   
+    <script src="{{ url_for('static', filename='test2.js') }}" defer></script>
 </head>
 <body>
     <header>
@@ -21,7 +21,6 @@
         </button> 
         <div id="weatherContent">
             <label>Here is the weather info</label>
-            
         </div>
     </header>
     <div id="map-container">
@@ -37,7 +36,7 @@
             <h2> Starting Point</h2>
             <form>
                 <label for="locationCheckBox">Use My Current Location</label>
-                <input type="checkbox" id="locationCheckBox" name="locationCheckBox"/>
+                <input type="checkbox" id="locationCheckBox" name="locationCheckBox">
             </form>
             <div id="startSelector">
                 <select required>
@@ -52,34 +51,21 @@
                     <option value="station2">Station 2</option>
                 </select>
             </div>
-        
             <div id="spaceSelector">
                 <label for="spaceSelector">I'm looking for a </label>
                 <select>
                     <option value="0">Bike</option>
                     <option value="1">Empty Bike Space</option>
                 </select>
-                
             </div>
-            
-
         </div>
         <input type="radio" class="tabs__radio" name="tabs" id="statsTab">
         <label for="statsTab" class="tabs__label" >Stats</label>
-
-
         <div class="tabs__content">
             <h1>Here are some stats :P</h1>
-    
         </div>
-        
       </div>
-        
     </div>
-
-    </div>
-
-
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&callback=initMap"></script>
 </body>
 </html>
