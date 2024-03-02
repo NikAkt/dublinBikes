@@ -6,9 +6,7 @@ async function fetchDublinBikesData() {
   try {
       const response=await fetch('/stations');
       const data=await response.json();
-      // console.log(data);
       stationData=data.station;
-      console.log(stationData);
       return stationData;
   } catch (error) {
       console.error('Error fetching Dublin Bikes data:', error);
@@ -19,11 +17,9 @@ async function fetchAvailabilityBikesData() {
   try {
       const response=await fetch('/availability');
       const data=await response.json();
-      console.log(data);
       availability=data.availability;
       temp=availability.reverse();
       availabilityActual=temp;
-      console.log(availabilityActual);
       return availabilityActual;
   } catch (error) {
       console.error('Error fetching availability data:', error);
@@ -103,9 +99,7 @@ async function initMap() {
           });
       }
       bikeStations = await fetchDublinBikesData();
-      console.log(bikeStations)
       availabilityActual= await fetchAvailabilityBikesData();
-      console.log(availabilityActual)
       
       // Create markers using the data
         createMarkers(map, bikeStations,availabilityActual);
