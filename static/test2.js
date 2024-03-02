@@ -1,28 +1,46 @@
 let bikeStations = [];
 let infoWindow;
-
+let availability;
 // fetching the data from the api
 async function fetchDublinBikesData() {
   try {
       const response=await fetch('/stations');
       const data=await response.json();
       // console.log(data);
-      realdata=data.station;
-      console.log(realdata);
-      return realdata;
+      stationData=data.station;
+      console.log(stationData);
+      return stationData;
   } catch (error) {
       console.error('Error fetching Dublin Bikes data:', error);
       return null;
   }
 }
+async function fetchAvailabilityBikesData() {
+  try {
+      const response=await fetch('/availability');
+      const data=await response.json();
+      console.log(data);
+      availability=data.availability;
+      temp=availability.reverse();
+      availabilityActual=temp;
+      console.log(availabilityActual);
+      return availabilityActual;
+  } catch (error) {
+      console.error('Error fetching availability data:', error);
+      return null;
+  }
+}
 //creating the markers using bike data
-function createMarkers(map, bikeStations) {
-  console.log("hello",bikeStations[0])
-  bikeStations.forEach(station => {
-    if (station.available_bikes === 0) {
+function createMarkers(map, bikeStations,availabilityActual) {
+  console.log("hello",availabilityActual[0])
+  for (let i = 0; i < bikeStations.length; i++) {
+    const station = bikeStations[i];
+    if (availabilityActual[i].available_bikes === 0) {
       markerColor = 'red';
-    } else if (station.available_bikes < 5) {
+    } else if (availabilityActual[i].available_bikes < 5) {
       markerColor = 'orange';
+    } else if (availabilityActual[i].available_bikes < 10) {
+      markerColor = 'green';
     } else {
       markerColor = 'blue';
     }
@@ -44,18 +62,18 @@ function createMarkers(map, bikeStations) {
           infoWindow.close(); 
       }
       infoWindow = new google.maps.InfoWindow({
-          content: `<div>${station.name}<br>Available Bikes: ${station.available_bikes}</div>`
+          content: `<div>${station.name}<br>Available Bikes: ${availabilityActual[i].available_bikes}<br>Available Bike Stands: ${availabilityActual[i].available_bike_stands}</div>`
       });
       infoWindow.open(map, marker);
-  });
-  });
+    });
+  }
 }
 //function to update the markers every 5 mins
 async function updateMarkers() {
   const updatedData = await fetchDublinBikesData();
   if (updatedData !== null) {
       bikeStations = updatedData;
-      createMarkers(map, bikeStations);
+      createMarkers(map, bikeStations,availabilityActual);
       
   } else {
       console.error('Data not found.');
@@ -72,7 +90,7 @@ async function initMap() {
       center: { lat: -34.397, lng: 150.644 },
       zoom: 8
   });
-//setting the default display location of the map
+  //setting the default display location of the map
   const mapDiv = document.getElementById('map');
   const mapCenter = { lat: 53.3483031, lng: -6.2637067 };
 
@@ -86,11 +104,13 @@ async function initMap() {
       }
       bikeStations = await fetchDublinBikesData();
       console.log(bikeStations)
+      availabilityActual= await fetchAvailabilityBikesData();
+      console.log(availabilityActual)
       
-// Create markers using the data
-        createMarkers(map, bikeStations);
+      // Create markers using the data
+        createMarkers(map, bikeStations,availabilityActual);
 
-//populateDropdown
+        //populateDropdown
         populateDropdown('#startSelector select', bikeStations);
         populateDropdown('#destinationSelector select', bikeStations);
         
