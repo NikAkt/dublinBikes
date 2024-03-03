@@ -58,7 +58,7 @@ function createMarkers(map, bikeStations,availabilityActual) {
           infoWindow.close(); 
       }
       infoWindow = new google.maps.InfoWindow({
-          content: `<div>${station.name}<br>Available Bikes: ${availabilityActual[i].available_bikes}<br>Available Bike Stands: ${availabilityActual[i].available_bike_stands}</div>`
+          content: `<div>${station.name}<br>Available Bikes: ${availabilityActual[i].available_bikes}<br>Free Bike Stands: ${availabilityActual[i].available_bike_stands}</div>`
       });
       infoWindow.open(map, marker);
     });
