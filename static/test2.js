@@ -46,20 +46,29 @@ const createMarkers = (map, bikeStations, availabilityActual) => {
 };
 
 async function initMap() {
-  map = new google.maps.Map(document.getElementById('map'), {
-      center: { lat: -34.397, lng: 150.644 },
-      zoom: 8
-  });
   //setting the default display location of the map
   const mapDiv = document.getElementById('map');
   const mapCenter = { lat: 53.3483031, lng: -6.2637067 };
 
   try {
-      // const { AdvancedMarkerElement } = await google.maps.importLibrary('marker');
       if (mapDiv) {
           map = new google.maps.Map(mapDiv, {
               center: mapCenter,
-              zoom: 13
+              zoom: 13,
+              styles: [
+                {
+                  featureType: 'poi',
+                  stylers: [{ visibility: 'off' }]
+                },
+                {
+                  featureType: 'transit',
+                  stylers: [{ visibility: 'off' }]
+                },
+                {
+                  featureType: 'all',
+                  stylers: [{ saturation: -30 }]
+                }
+              ]
           });
       }
       bikeStations = await fetchDublinBikesData();
@@ -76,7 +85,7 @@ async function initMap() {
   } catch (error) {
       console.error('Error importing marker library:', error);
   }
-
+}
 async function fetchDublinBikesData() {
   try {
       const response=await fetch('/stations');
@@ -149,7 +158,7 @@ function getCurrentDateTime() {
 
 document.addEventListener('DOMContentLoaded', function() {
   document.getElementById('dateTimeInput').value = getCurrentDateTime();
-})}
+})
 
 //function to populate the dropwdowns with the stations
 function populateDropdown(selector, stations) {
