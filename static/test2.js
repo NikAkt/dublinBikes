@@ -1,4 +1,5 @@
 let bikeStations = [];
+const markers = [];
 let infoWindow;
 let availability;
 let map;
@@ -39,7 +40,9 @@ const createMarkers = (map, bikeStations, availabilityActual) => {
       });
       infoWindow.open(map, marker);
     });
+    markers.push(marker); //adding each marker to markers array so it can be ecorporated in the cluster 
   });
+  const markerCluster = new markerClusterer.MarkerClusterer({ markers, map }); //creating the cluster from markers
 };
 
 async function initMap() {
