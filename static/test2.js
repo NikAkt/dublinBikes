@@ -73,7 +73,11 @@ async function initMap() {
           });
       
           const directionsService = new google.maps.DirectionsService();
-          const directionsRenderer = new google.maps.DirectionsRenderer();
+          const directionsRenderer = new google.maps.DirectionsRenderer({
+            polylineOptions: {
+              strokeColor: 'magenta'
+            }
+          });
           directionsRenderer.setMap(map);
 
           const startSelector = document.querySelector('#startSelector select');
