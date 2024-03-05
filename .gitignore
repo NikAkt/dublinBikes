@@ -3,3 +3,4 @@
 static/Images/.DS_Store
 *.pyc
 config.json
+__pycache__/
