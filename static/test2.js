@@ -71,6 +71,36 @@ async function initMap() {
               ],
               streetViewControl: false
           });
+      
+          const directionsService = new google.maps.DirectionsService();
+          const directionsRenderer = new google.maps.DirectionsRenderer();
+          directionsRenderer.setMap(map);
+
+          const startSelector = document.querySelector('#startSelector select');
+          const endSelector = document.querySelector('#destinationSelector select');
+          const goButton = document.getElementById('goButton');
+
+          goButton.addEventListener('click', function() {
+            const startStationNumber = startSelector.value.replace('station', '');
+            const startStation = bikeStations.find(station => station.number == startStationNumber);
+          
+            const endStationNumber = endSelector.value.replace('station', '');
+            const endStation = bikeStations.find(station => station.number == endStationNumber);
+          
+            if (startStation && endStation) {
+              const request = {
+                origin: { lat: startStation.position_lat, lng: startStation.position_lng },
+                destination: { lat: endStation.position_lat, lng: endStation.position_lng },
+                travelMode: 'BICYCLING'
+              };
+          
+              directionsService.route(request, function(result, status) {
+                if (status == 'OK') {
+                  directionsRenderer.setDirections(result);
+                }
+              });
+            }
+          });
       }
       bikeStations = await fetchDublinBikesData();
       availabilityActual= await fetchAvailabilityBikesData();
