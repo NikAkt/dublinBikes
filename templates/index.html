@@ -6,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dublin Bikes Data</title>
-    <script src="{{ url_for('static', filename='test2.js') }}" defer></script>
     <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 </head>
 <body>
@@ -55,6 +54,7 @@
                             <option value="1">Empty Bike Space</option>
                         </select>
                     </div>
+                    <button id="goButton">Go</button>
                 </div>
                 <input type="radio" class="tabs__radio" name="tabs" id="statsTab">
                 <label for="statsTab" class="tabs__label" >Stats</label>
@@ -64,6 +64,7 @@
             </div>
         </section>
     </main>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&callback=initMap"></script>
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&callback=initMap"></script>
+    <script src="{{ url_for('static', filename='test2.js') }}" defer></script>
 </body>
 </html>
