@@ -39,7 +39,7 @@ const createMarkers = (map, bikeStations, availabilityActual) => {
         content: `<div>${station.name}<br>Available Bikes: ${availabilityActual[i].available_bikes}<br>Available Bike Stands: ${availabilityActual[i].available_bike_stands}</div>`
       });
       infoWindow.open(map, marker);
-    });
+ });
     markers.push(marker); //adding each marker to markers array so it can be ecorporated in the cluster 
   });
   const markerCluster = new markerClusterer.MarkerClusterer({ markers, map }); //creating the cluster from markers
@@ -81,6 +81,7 @@ async function initMap() {
           directionsRenderer.setMap(map);
 
           const startSelector = document.querySelector('#startSelector select');
+          
           const endSelector = document.querySelector('#destinationSelector select');
           const goButton = document.getElementById('goButton');
 
@@ -108,7 +109,7 @@ async function initMap() {
       }
       bikeStations = await fetchDublinBikesData();
       availabilityActual= await fetchAvailabilityBikesData();
-      
+      console.log(availabilityActual);
       // Create markers using the data
         createMarkers(map, bikeStations,availabilityActual);
 
@@ -116,6 +117,52 @@ async function initMap() {
         populateDropdown('#startSelector select', bikeStations);
         populateDropdown('#destinationSelector select', bikeStations);
         
+        const locationCheckBox = document.getElementById('locationCheckBox');
+  if (locationCheckBox) {
+    locationCheckBox.addEventListener('change', async function() {
+      if (this.checked) {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(async function(position) {
+            const userLocation = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            map.setCenter(userLocation);
+
+            const stationsWithBikes = availabilityActual.filter(station => station.available_bikes > 2);            
+            console.log('Stations with bikes:', stationsWithBikes);
+            const closestStation = stationsWithBikes.reduce((prev, curr) => {
+              const d1 = google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(userLocation), 
+                new google.maps.LatLng({ lat: prev.lat, lng: prev.lng })
+              );
+              const d2 = google.maps.geometry.spherical.computeDistanceBetween(
+                new google.maps.LatLng(userLocation), 
+                new google.maps.LatLng({ lat: curr.lat, lng: curr.lng })
+              );
+              return d1 < d2 ? prev : curr;
+            });
+
+            // Set the starting point to the closest station
+            let startStationNumber = closestStation.number;
+            for (let station of bikeStations) {
+              if (station.number === startStationNumber) {
+                const startSelector = document.querySelector('#startSelector select');
+                startSelector.value = `station${station.number}`;
+                break;
+              }
+            }
+
+          }, function() {
+            handleLocationError(true, infoWindow, map.getCenter());
+          });
+        } else {
+          // Browser doesn't support Geolocation
+          handleLocationError(false, infoWindow, map.getCenter());
+        }
+      }
+    });
+  }
 
   } catch (error) {
       console.error('Error importing marker library:', error);
