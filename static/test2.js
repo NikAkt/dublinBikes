@@ -68,7 +68,8 @@ async function initMap() {
                   featureType: 'all',
                   stylers: [{ saturation: -30 }]
                 }
-              ]
+              ],
+              streetViewControl: false
           });
       }
       bikeStations = await fetchDublinBikesData();
