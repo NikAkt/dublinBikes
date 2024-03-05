@@ -39,7 +39,9 @@ const createMarkers = (map, bikeStations, availabilityActual) => {
         content: `<div>${station.name}<br>Available Bikes: ${availabilityActual[i].available_bikes}<br>Available Bike Stands: ${availabilityActual[i].available_bike_stands}</div>`
       });
       infoWindow.open(map, marker);
- });
+      const endSelector = document.querySelector('#destinationSelector select');
+      endSelector.value = `station${station.number}`;
+    });
     markers.push(marker); //adding each marker to markers array so it can be ecorporated in the cluster 
   });
   const markerCluster = new markerClusterer.MarkerClusterer({ markers, map }); //creating the cluster from markers
