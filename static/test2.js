@@ -111,11 +111,8 @@ async function initMap() {
       }
       bikeStations = await fetchDublinBikesData();
       availabilityActual= await fetchAvailabilityBikesData();
-      console.log(availabilityActual);
-      // Create markers using the data
-        createMarkers(map, bikeStations,availabilityActual);
+      createMarkers(map, bikeStations,availabilityActual);
 
-        //populateDropdown
         populateDropdown('#startSelector select', bikeStations);
         populateDropdown('#destinationSelector select', bikeStations);
         
@@ -132,7 +129,6 @@ async function initMap() {
             map.setCenter(userLocation);
 
             const stationsWithBikes = availabilityActual.filter(station => station.available_bikes > 2);            
-            console.log('Stations with bikes:', stationsWithBikes);
             const closestStation = stationsWithBikes.reduce((prev, curr) => {
               const d1 = google.maps.geometry.spherical.computeDistanceBetween(
                 new google.maps.LatLng(userLocation), 
