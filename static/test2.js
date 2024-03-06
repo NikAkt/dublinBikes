@@ -173,3 +173,29 @@ function populateDropdown(selector, stations) {
     selectElement.appendChild(option);
   });
 }
+
+//openweather buttom and widget
+window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
+window.myWidgetParam.push({
+    id: 23,
+    cityid: '2964574',
+    appid: '43aeecf5b252d71ca98d7f4dd8aaee24', 
+    units: 'metric',
+    containerid: 'openweathermap-widget-23', // Container ID for the first widget
+},{
+    id: 21,
+    cityid: '2964574', 
+    appid: '43aeecf5b252d71ca98d7f4dd8aaee24', 
+    units: 'metric',
+    containerid: 'openweathermap-widget-21', // Container ID for the second widget
+});
+
+// Insert the weather-widget-generator.js script 
+(function() {
+    var script = document.createElement('script');
+    script.async = true;
+    script.charset = "utf-8";
+    script.src = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+    var s = document.getElementsByTagName('script')[0];
+    s.parentNode.insertBefore(script, s);
+})();

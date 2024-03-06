@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="shortcut icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico') }}">
@@ -9,15 +10,19 @@
     <script src="{{ url_for('static', filename='test2.js') }}" defer></script>
     <script src="https://unpkg.com/@googlemaps/markerclusterer/dist/index.min.js"></script>
 </head>
+
 <body>
     <header>
         <h1>dublinBikes</h1>
         <button type="button" id="weatherButton">
-            <img id="tempIcon" src="../static/Images/tempIcon.png" alt="Temperature Icon">
-            <p>4°C</p>
-            <img src="../static/Images/cloudIcon.png" alt="Weather Icon">
-            <img src="../static/Images/dropdown.png" id="dropdownArrow" alt="Dropdown Arrow">
-        </button> 
+            <div id="openweathermap-widget-23"></div>
+            <div id="arrowDiv">
+                <img src="../static/Images/dropdown.png" id="dropdownArrow" alt="Dropdown Arrow">
+            </div>
+        </button>
+        <div id="weatherContent">
+            <div id="openweathermap-widget-21"></div>
+        </div>
     </header>
     <main>
         <section id="map-container">
@@ -26,7 +31,7 @@
         <section id="mainDiv">
             <div class="tabs">
                 <input type="radio" class="tabs__radio" name="tabs" id="journeyPlanner" checked>
-                <label for="journeyPlanner" class="tabs__label" >Journey Planner</label>
+                <label for="journeyPlanner" class="tabs__label">Journey Planner</label>
                 <div class="tabs__content">
                     <h1>Plan Your Journey</h1>
                     <input type="datetime-local" id="dateInput" name="dateInput">
@@ -40,7 +45,7 @@
                             <option value="">Select a Station</option>
                         </select>
                     </div>
-                    <h2> Destination </h2>  
+                    <h2> Destination </h2>
                     <div id="destinationSelector">
                         <select required>
                             <option value="">Select a Station</option>
@@ -57,13 +62,15 @@
                     </div>
                 </div>
                 <input type="radio" class="tabs__radio" name="tabs" id="statsTab">
-                <label for="statsTab" class="tabs__label" >Stats</label>
+                <label for="statsTab" class="tabs__label">Stats</label>
                 <div class="tabs__content">
                     <h1>Here are some stats :P</h1>
                 </div>
             </div>
         </section>
     </main>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&callback=initMap"></script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDMKKvS9vRhP3fCiRPp42gK7-4bL2gYaMw&callback=initMap"></script>
 </body>
+
 </html>
