@@ -30,66 +30,63 @@ h2 {
 /*WEATHER DROPDOWN, ON HOVER, AND CONTENT */
 /*add animation arrow on click*/
 #weatherButton {
-  display: flex;
-  align-items: center;
-  border-radius: 0.5em;
-  border: 2px #ffffff solid;
-  width: 15%;
-  background-color: #f3f3f3;
-  font-size: 120%;
-  font-weight: 500;
-  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+
   position: absolute;
   top: 15%;
   right: 2%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 15%;
   height: 70%;
   max-height: 70%;
-  overflow: hidden;
+  background-color:#ffffff;
+  border: 2px solid #ffffff;
+  border-radius: .5em;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
 }
 
-/*temporary icon*/
-#weatherButton img {
-  max-height: 90%;
-  margin: 2%;
-  margin-left: 5%;
-  float: left;
+#openweathermap-widget-23 {
+  position: relative; 
+  width: 100%; 
+  height: auto; 
+  margin: 0;
+  padding: 0;
+  padding-top: 10px;
 }
 
-#tempIcon {
-  height: 60%;
-  margin-right: 0;
-  float: left;
+.active, #weatherButton:hover{
+    background-color: #b2b2b2;
+    cursor: pointer;
 }
-#weatherButton p {
-  margin: 0; /* Remove default margin for the paragraph */
-  flex: 1;
-  float: left; /* Allow the temperature to take the remaining space */
+
+#dropdownArrow{
+    float: right;
+    width: 0.8em;
+    display: flex;
+    margin-right: 10%;
+    padding-right: 2%;
 }
-.active,
-#weatherButton:hover {
-  background-color: #b2b2b2;
-  cursor: pointer;
-}
-#dropdownArrow {
-  float: right;
-  height: 30%;
-  display: flex;
-  margin-right: 10%;
-  padding-right: 2%;
-}
+
 #weatherContent {
-  border-radius: 0.5em;
-  padding: 0.2em 0.5em;
+    border-radius: .5em;
+    display: none;
+    overflow: hidden;
+    background-color:  #f1f1f1;
+    width:auto;
+    position: absolute;
+    top: calc(15% + 70%);
+    right: 2%;
+    box-shadow: 0 0.5em  1em rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
 
-  display: none;
-  overflow: hidden;
-  background-color: #f1f1f1;
-  width: 15%;
-  position: absolute;
-  top: calc(15% + 70%);
-  right: 2%;
-  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+#openweathermap-widget-21 {
+  position: relative; 
+  width: 100%; 
+  height: auto; 
+  
 }
 
 /*Temporary Map Image*/

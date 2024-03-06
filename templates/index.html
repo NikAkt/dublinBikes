@@ -17,21 +17,16 @@
   </head>
   <body>
     <header>
-      <h1>dublinBikes</h1>
-      <button type="button" id="weatherButton">
-        <img
-          id="tempIcon"
-          src="../static/Images/tempIcon.png"
-          alt="Temperature Icon"
-        />
-        <p>4°C</p>
-        <img src="../static/Images/cloudIcon.png" alt="Weather Icon" />
-        <img
-          src="../static/Images/dropdown.png"
-          id="dropdownArrow"
-          alt="Dropdown Arrow"
-        />
-      </button>
+        <h1>dublinBikes</h1>
+        <button type="button" id="weatherButton">
+            <div id="openweathermap-widget-23"></div>
+            <div id="arrowDiv">
+                <img src="../static/Images/dropdown.png" id="dropdownArrow" alt="Dropdown Arrow">
+            </div>
+        </button>
+        <div id="weatherContent">
+            <div id="openweathermap-widget-21"></div>
+        </div>
     </header>
     <main>
       <section id="map-container">
