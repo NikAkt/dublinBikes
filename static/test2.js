@@ -140,7 +140,7 @@ async function initMap() {
                 map.setCenter(userLocation);
 
                 const stationsWithBikes = availabilityActual.filter(
-                  (station) => station.available_bikes > 2
+                  (station) => station.available_bikes > 0
                 );
                 const closestStation = stationsWithBikes.reduce(
                   (prev, curr) => {
