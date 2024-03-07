@@ -3,6 +3,8 @@ const markers = [];
 let infoWindow;
 let availability;
 let map;
+let globalClosestStation = null;
+
 
 const createMarkers = (map, bikeStations, availabilityActual) => {
   bikeStations.forEach((station, i) => {
@@ -297,3 +299,86 @@ window.myWidgetParam.push({
     var s = document.getElementsByTagName('script')[0];
     s.parentNode.insertBefore(script, s);
 })();
+
+// search buttom event listener
+document.getElementById('findLocationButton').addEventListener('click', async function() {
+  const address = document.getElementById('addressInput').value;
+  try {
+    const location = await geocodeAddress(address);
+    map.setCenter(location); 
+    popupLocationOnMap(location); 
+  } catch (error) {
+    console.error(error);
+    alert("Geocoding failed: " + error);
+  }
+});
+
+// fuction to pop up the location
+function popupLocationOnMap(location) {
+  map.setCenter(location); 
+  const marker = new google.maps.Marker({
+    position: location,
+    map: map
+  });}
+
+// Find Cloest Station Buttom event listener
+document.getElementById('geocodeButton').addEventListener('click', function() {
+  const mapCenter = map.getCenter();
+  const closestStation = findClosestStation(mapCenter.toJSON()); 
+  globalClosestStation = closestStation; 
+});
+
+  
+// function to convert the user location to coordinate
+async function geocodeAddress(address) {
+  const geocoder = new google.maps.Geocoder();
+  return new Promise((resolve, reject) => {
+    geocoder.geocode({ 'address': address }, (results, status) => {
+      if (status === 'OK') {
+        resolve(results[0].geometry.location);
+      } else {
+        reject('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  });
+}
+
+// function to find the cloest station 
+function findClosestStation(location) {
+  const closestStation = bikeStations.reduce((prev, curr) => {
+    const d1 = google.maps.geometry.spherical.computeDistanceBetween(
+      new google.maps.LatLng(location),
+      new google.maps.LatLng({ lat: prev.position_lat, lng: prev.position_lng })
+    );
+    const d2 = google.maps.geometry.spherical.computeDistanceBetween(
+      new google.maps.LatLng(location),
+      new google.maps.LatLng({ lat: curr.position_lat, lng: curr.position_lng })
+    );
+    return d1 < d2 ? prev : curr;
+  });
+
+  // get the closest station location
+  const closestStationLocation = {
+    lat: closestStation.position_lat,
+    lng: closestStation.position_lng
+  };
+  globalClosestStation = closestStation;// set it as a global var
+
+  // call popupLocationOnMap fun to pop up the closest station location
+  popupLocationOnMap(closestStationLocation);
+  return closestStation; 
+}
+
+
+// set the cloest station as start or end
+function setStationAs(selectorId, station) {
+  document.querySelector(selectorId).value = `station${station.number}`;
+}
+
+ddocument.getElementById('setAsStart').addEventListener('click', function() {
+  setStationAs('#startSelector select', globalClosestStation);
+});
+
+document.getElementById('setAsEnd').addEventListener('click', function() {
+  setStationAs('#destinationSelector select', globalClosestStation);
+});
