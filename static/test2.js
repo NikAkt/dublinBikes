@@ -375,7 +375,7 @@ function setStationAs(selectorId, station) {
   document.querySelector(selectorId).value = `station${station.number}`;
 }
 
-ddocument.getElementById('setAsStart').addEventListener('click', function() {
+document.getElementById('setAsStart').addEventListener('click', function() {
   setStationAs('#startSelector select', globalClosestStation);
 });
 
