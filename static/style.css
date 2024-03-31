@@ -187,7 +187,6 @@ h2 {
   max-width: 400px;
 }
 
-
 /* Common styles for all buttons */
 .location-search button {
   background-color: #d5eee9;
@@ -219,7 +218,7 @@ h2 {
 }
 
 #setAsStart:hover {
-  background-color: #60a0b0;
+  background-color: #80bbc9;
 }
 
 #setAsEnd {
@@ -227,7 +226,44 @@ h2 {
 }
 
 #setAsEnd:hover {
-  background-color: #60a0b0;
+  background-color: #80bbc9;
+}
+
+
+/* Base styling for selectors and buttons */
+select,
+button#goButton {
+  width: 100%;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+
+
+/* Styles for dropdowns, matching the location search input field */
+#startSelector select,
+#destinationSelector select,
+#spaceSelector select {
+  display: block;
+  box-sizing: border-box;
+}
+
+
+/* Adjust the general div containers */
+#startSelector,
+#destinationSelector,
+#spaceSelector {
+  text-align: center;
+  max-width: 400px;
+  margin: auto;
+}
+
+
+#spaceSelector {
+  margin-bottom: 10px;
 }
 
 
