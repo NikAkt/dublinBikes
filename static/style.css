@@ -180,6 +180,56 @@ h2 {
   margin-right: 10px;
 }
 
+/* Base styling for the entire search bar area */
+.location-search {
+  font-family: 'Arial', sans-serif;
+  text-align: center;
+  max-width: 400px;
+}
+
+
+/* Common styles for all buttons */
+.location-search button {
+  background-color: #d5eee9;
+  border: none;
+  padding: 5px;
+  margin: 3px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.location-search button:hover {
+  background-color: #89d5c6;
+}
+
+/* Style for the input field */
+.location-search input[type="text"] {
+  width: 100%;
+  padding: 3px;
+  margin: 3px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+}
+
+/* Specific styles for 'Set as Start' and 'Set as End' buttons for differentiation */
+#setAsStart {
+  background-color: #aedeea;
+}
+
+#setAsStart:hover {
+  background-color: #60a0b0;
+}
+
+#setAsEnd {
+  background-color: #aedeea;
+}
+
+#setAsEnd:hover {
+  background-color: #60a0b0;
+}
+
 
 #map-container {
   width: 100%; /* Set the width to 100% of the viewport width */
