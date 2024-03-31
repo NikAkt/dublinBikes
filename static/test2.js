@@ -436,3 +436,41 @@ document.getElementById('setAsStart').addEventListener('click', function() {
 document.getElementById('setAsEnd').addEventListener('click', function() {
   setStationAs('#destinationSelector select', globalClosestStation);
 });
+
+// function to resolve the user location to coordinate
+async function geocodeAddressFromPlace(place) {
+  return new Promise((resolve, reject) => {
+    if (!place.geometry) {
+      reject('No location found for the entered place.');
+    } else {
+      resolve(place.geometry.location);
+    }
+  });
+}
+
+// Autocomplete
+const input = document.getElementById('addressInput');
+const options = {
+  componentRestrictions: { country: 'ie' } // Restrict results to Ireland using its country code
+};
+const autocomplete = new google.maps.places.Autocomplete(input, options);
+
+autocomplete.addListener('place_changed', function () {
+  const place = autocomplete.getPlace();
+  if (!place.geometry) {
+    console.log("No details available for input: '" + place.name + "'");
+    return;
+  }
+});
+
+
+  // call  geocodeAddressFromPlace to convert places to coordinations
+  geocodeAddressFromPlace(place)
+    .then(location => {
+      map.setCenter(location);
+      popupLocationOnMap(location);
+    })
+    .catch(error => {
+      console.error(error);
+      alert("Failed to find location: " + error);
+    });
