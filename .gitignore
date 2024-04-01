@@ -1,8 +1,7 @@
-
-.env
-static/Images/.DS_Store
 *.pyc
-config.json
 __pycache__/
-__pycache__/app.cpython-311.pyc
-__pycache__/app.cpython-311.pyc
+.DS_Store
+.env
+config.json
+static/Images/.DS_Store
+

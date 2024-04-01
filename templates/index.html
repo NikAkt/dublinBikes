@@ -39,12 +39,23 @@
           <!-- search bar div -->
           <div class="location-search">
             <h2>Search and Set Location</h2>
-            <input type="text" id="addressInput" placeholder="Enter an address" />
-            <button id="findLocationButton">Search Location</button>
-            <button id="geocodeButton">Find Cloest Station</button>
-            <button id="setAsStart">Set as Start</button>
-            <button id="setAsEnd">Set as End</button>
+            <div class="row">
+              <!-- row 1 -->
+              <input type="text" id="addressInput" class="flex-item" placeholder="Enter an address" />
+              <button id="findLocationButton" class="flex-item">Search</button>
+            </div>
+            <div class="row">
+              <!-- row 2 -->
+              <button id="geocodeButton" class="flex-item">Find Closest Station</button>
+              <button id="findEmptyStationButton" class="flex-item">Find Return Spot</button>
+            </div>
+            <div class="row">
+              <!-- row 3 -->
+              <button id="setAsStart" class="flex-item">Set as Start</button>
+              <button id="setAsEnd" class="flex-item">Set as End</button>
+            </div>
           </div>
+          
           <h2>Starting Point</h2>
           <form>
             <label for="locationCheckBox">Use My Current Location</label>
@@ -61,13 +72,6 @@
               <option value="">Select a Station</option>
               <option value="station1">Station 1</option>
               <option value="station2">Station 2</option>
-            </select>
-          </div>
-          <div id="spaceSelector">
-            <label for="spaceSelector">I'm looking for a </label>
-            <select>
-              <option value="0">Bike</option>
-              <option value="1">Empty Bike Space</option>
             </select>
           </div>
           <button id="goButton">Go</button>
