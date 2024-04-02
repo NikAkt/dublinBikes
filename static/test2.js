@@ -100,8 +100,8 @@ async function initMap() {
           (station) => station.number == endStationNumber
         );
 
-        drawBasic(startStationNumber);
-        drawBasic(endStationNumber);
+        drawBasicBikes(startStationNumber);
+        drawBasicStands(endStationNumber);
 
         if (startStation && endStation) {
           const request = {
@@ -131,11 +131,15 @@ async function initMap() {
       statsTab.addEventListener("click", function () {
         // Load and draw the chart when the Stats tab is clicked
         const startStationNumber = startSelector.value.replace("station", "");
-        drawBasic(startStationNumber);
+        drawBasicBikes(startStationNumber);
+      
+          // Load and draw the chart when the Stats tab is clicked
+        const endStationNumber = endSelector.value.replace("station", "");
+        drawBasicStands(endStationNumber);
       });
     });
 
-    function drawBasic(stationId) {
+    function drawBasicBikes(stationId) {
       // Load the Visualization API and the corechart package
       google.charts.load('current', { 'packages': ['corechart'] });
   
@@ -165,15 +169,60 @@ async function initMap() {
                   vAxis: {
                       title: 'Number of Bikes Available'
                   },
-                  legend: { position: 'none' }
+                  legend: { position: 'none' },
+                  width: 330, // Set chart width to 800 pixels
+                  height: 200 
               };
   
               // Instantiate and draw the chart
-              var chart = new google.visualization.LineChart(document.getElementById('chartDiv'));
+              var chart = new google.visualization.LineChart(document.getElementById('bikesChart'));
               chart.draw(data, options);
           });
       }
   }
+
+  function drawBasicStands(stationId) {
+    // Load the Visualization API and the corechart package
+    google.charts.load('current', { 'packages': ['corechart'] });
+
+    // Set a callback to run when the Google Visualization API is loaded
+    google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+        // Make an AJAX request to get the availability data for the station
+        var jqxhr = $.getJSON("/availability_by_hour/" + stationId, function(data) {
+            var availabilityData = data.availability;
+
+            var chartData = [['Hour', 'Bikes Available']];
+            for (var i = 0; i < availabilityData.length; i++) {
+              // Convert hour values to numbers
+              var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
+              chartData.push([hour, parseFloat(availabilityData[i].avg_bikes_available)]);
+            }
+
+            var data = google.visualization.arrayToDataTable(chartData);
+
+            // Set chart options
+            var options = {
+                title: 'Stand Availability By Hour',
+                hAxis: {
+                    title: 'Hour of the Day'
+                },
+                vAxis: {
+                    title: 'Number of Stands Available'
+                },
+                legend: { position: 'none' },
+                width: 330, // Set chart width to 800 pixels
+                height: 200 
+            };
+
+            // Instantiate and draw the chart
+            var chart = new google.visualization.LineChart(document.getElementById('standsChart'));
+            chart.draw(data, options);
+        });
+    }
+}
+  
 
     bikeStations = await fetchDublinBikesData();
     availabilityActual = await fetchAvailabilityBikesData();

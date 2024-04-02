@@ -28,37 +28,28 @@ h2 {
 }
 
 /*WEATHER DROPDOWN, ON HOVER, AND CONTENT */
-/*add animation arrow on click*/
 #weatherButton {
-
   position: absolute;
-  top: 15%;
+  top: 10%;
   right: 2%;
-  display: flex;
   align-items: center;
-  justify-content: space-between;
-  width: 15%;
-  height: 70%;
-  max-height: 70%;
+  max-height: 82%;
   background-color:#ffffff;
-  border: 2px solid #ffffff;
-  border-radius: .5em;
+  border: 3px solid #ffffff;
+  border-radius: .8em;
   box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
+  display: flexbox;
+  border: 2px solid transparent;
 }
 
-#openweathermap-widget-23 {
-  position: relative; 
-  width: 100%; 
-  height: auto; 
-  margin: 0;
-  padding: 0;
-  padding-top: 10px;
+#openweathermap-widget-23{
+  border: 2px solid transparent;
 }
-
-.active, #weatherButton:hover{
-    background-color: #b2b2b2;
+.active #openweathermap-widget-23:hover, #weatherButton:hover{
     cursor: pointer;
+    box-shadow: #171616;
+    border: 2px solid yellow;
 }
 
 #dropdownArrow{
@@ -82,21 +73,9 @@ h2 {
     z-index: 1000;
 }
 
-#openweathermap-widget-21 {
-  position: relative; 
-  width: 100%; 
-  height: auto; 
-  
-}
-
-/*Temporary Map Image*/
-#temporaryMap {
-  width: 100%;
-}
-
 #mainDiv {
   border: 2px solid black;
-  height: 78%;
+  height: 75%;
   align-items: center;
   border-radius: 0.5em;
   width: fit-content;
@@ -104,7 +83,7 @@ h2 {
   overflow: hidden;
   left: 3%;
   position: fixed;
-  height: 78%;
+  height: 75%;
   max-height: 78%;
   background-color: #ffffff;
 }
@@ -181,13 +160,14 @@ h2 {
 }
 
 #map-container {
-  width: 100%; /* Set the width to 100% of the viewport width */
-  height: 70vh; /* Set the height to 70% of the viewport height, adjust as needed */
+  width: 100%; 
+  height: 70vh; 
   position: relative;
   margin: 0;
   padding: 0;
 }
 
 #map {
-  height: 120%; /* Set the map height to 100% of the parent container */
+  height: 120%; 
 }
+

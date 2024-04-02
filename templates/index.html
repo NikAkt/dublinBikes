@@ -48,13 +48,12 @@
           >
           <div class="tabs__content">
             <h1>Plan Your Journey</h1>
-            <input type="datetime-local" id="dateInput" name="dateInput" />
             <!-- search bar div -->
             <div class="location-search">
               <h2>Search and Set Location</h2>
               <input type="text" id="addressInput" placeholder="Enter an address" />
               <button id="findLocationButton">Search Location</button> 
-              <button id="geocodeButton">Find Cloest Station</button>
+              <button id="geocodeButton">Find Closest Station</button>
               <br>
               <button id="setAsStart">Set as Start</button>
               <button id="setAsEnd">Set as End</button>
@@ -81,20 +80,21 @@
                 <option value="station2">Station 2</option>
               </select>
             </div>
-            <div id="spaceSelector">
-              <label for="spaceSelector">I'm looking for a </label>
-              <select>
-                <option value="0">Bike</option>
-                <option value="1">Empty Bike Space</option>
-              </select>
-            </div>
+
             <button id="goButton">Go</button>
+            <div>
+              <h3> Plan a Future Journey</h3>
+              <input type="datetime-local" id="dateInput" name="dateInput" />
+            </div>
+            
           </div>
           <input type="radio" class="tabs__radio" name="tabs" id="statsTab" />
           <label for="statsTab" class="tabs__label">Stats</label>
           <div class="tabs__content">
             <h1>Select Your Route to View Bike Station Stats</h1>
             <div id="chartDiv">
+              <div id="bikesChart"></div>
+              <div id="standsChart"></div>
             </div>
           </div>
         </div>
