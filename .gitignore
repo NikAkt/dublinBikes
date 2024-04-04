@@ -1,6 +1,7 @@
-
 .env
 static/Images/.DS_Store
+.DS_Store
+*.csv
 *.pyc
 config.json
 __pycache__/
