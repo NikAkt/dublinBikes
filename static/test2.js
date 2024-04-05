@@ -101,44 +101,16 @@ async function initMap() {
         );
 
         let dateInputValue = document.getElementById('dateInput').value;
-
-        let dateObj = new Date(dateInputValue);
-        let unixTimestamp = Math.floor(dateObj.getTime() / 1000);
-
-        // let temp_year = dateObj.getFullYear();
-        // let temp_month = ("0" + (dateObj.getMonth() + 1)).slice(-2); // Months are 0 based
-        // let temp_day = ("0" + dateObj.getDate()).slice(-2);
-        // let temp_hour = ("0" + dateObj.getHours()).slice(-2);
-        // let temp_minute = ("0" + dateObj.getMinutes()).slice(-2);
-        // let temp_second = ("0" + dateObj.getSeconds()).slice(-2);
-        // let formattedDate = `${temp_year}-${temp_month}-${temp_day} ${temp_hour}:${temp_minute}:${temp_second}`;
-        // console.log(formattedDate);
-
-
-        // let year = dateObj.getFullYear();
-        // let month = dateObj.getMonth() + 1; // Months are 0-based in JavaScript
-        // let day = dateObj.getDate();
-        // let hour = dateObj.getHours();
-        // let minute = dateObj.getMinutes();
-        // let dayOfWeek = dateObj.getDay(); // 0 (Sunday) to 6 (Saturday)
-
-        console.log(`Timestamp: ${unixTimestamp}`);
-
+        console.log(dateInputValue);
         fetch('http://localhost:8080/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          timestamp: unixTimestamp,
+          datetime: dateInputValue,
           station_number_start: startStationNumber,
           station_number_end: endStationNumber,
-          year: year,
-          month: month,
-          day: day,
-          hour: hour,
-          minute: minute,
-          day_of_week: dayOfWeek
         }),
         })
       .then(response => response.json())

@@ -9,6 +9,7 @@ import joblib
 import requests
 from datetime import datetime, timedelta
 from dateutil.parser import parse
+import pandas as pd
 
 station_count=0
 
@@ -50,14 +51,18 @@ def get_weather_forecast():
         json.dump(forecast, f)
     return
 
-def process_weather_forecast(weather_json, dateTime):
+def process_weather_forecast(dateTime):
     """
-    Processes the weather forecast JSON to extract the relevant weather data for the given timestamp.
+    Opens the weather_forecast.json file and processes it to extract the relevant weather data for the given timestamp.
     """
-    print(weather_json)
-    print("=====================================")
+    with open('weather_forecast.json') as f:
+        weather_json = json.load(f)
+
+    print(json.dumps(weather_json))
+    print("---------------------------------")
+
     for item in weather_json['list']:
-        if item['dt_txt'] == dateTime:
+        if item['dt'] == dateTime:
             temp_k = item['main']['temp']
             feels_like_k = item['main']['feels_like']
             wind_speed = item['wind']['speed']
@@ -170,56 +175,58 @@ def get_availability_by_hour(station_id):
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    model_inputs = request.get_json()
+    data_from_website = request.get_json()
     get_weather_forecast()
-    # proc_weather_data=process_weather_forecast(weather, data['timestamp'])
-    
-    # hour = (timestamp.hour // 3) * 3
-    # timestamp = timestamp.replace(hour=hour, minute=0, second=0)
-    # timestamp = int(timestamp.timestamp())
 
-    temp_datetime = (model_inputs['timestamp'])
+    temp_datetime = (data_from_website['datetime'])
+    print("Current time bro",temp_datetime)
+    temp_datetime = parse(temp_datetime)
 
-    round_times = [0, 3, 6, 9, 12, 15, 18, 21]
+    target_times = [0, 3, 6, 9, 12, 15, 18, 21]
     hour = temp_datetime.hour
-    next_hour = min((t for t in round_times if t >= hour), default=0)
-    if next_hour == 0:
-        temp_datetime += timedelta(days=1)
 
-    # Replace the hour of temp_datetime with next_hour
-    temp_datetime = temp_datetime.replace(hour=next_hour, minute=0, second=0, microsecond=0)
+    if hour in target_times:
+        next_hour = hour
+    else:
+        next_hour = min((t for t in target_times if t > hour), default=0)
+        if next_hour == 0:
+            temp_datetime += timedelta(days=1)
 
-    with open('processed_weather_data.json', 'r') as f:
-        weather = json.load(f)
+    temp_datetime = temp_datetime.replace(hour=next_hour+1, minute=0, second=0, microsecond=0)
+    print("Next hour bro",temp_datetime)
 
-    temp_c, feels_like_c, wind_speed, humidity = process_weather_forecast(weather, temp_datetime)
+    unix_timestamp = int(temp_datetime.timestamp())
+    print("Unix timestamp bro",unix_timestamp)
+    dt = datetime.fromtimestamp(unix_timestamp)
+
+    # Extract year, month, day, hour, minute, and day of week
+    year = dt.year
+    month = dt.month
+    day = dt.day
+    hour = dt.hour
+    minute = dt.minute
+    day_of_week = dt.weekday()  # Returns the day of the week as an integer
+
+    print("Year:", year)
+    print("Month:", month)
+    print("Day:", day)
+    print("Hour:", hour)
+    print("Minute:", minute)
+    print("Day of Week:", day_of_week)
+
+    temp_c, feels_like_c, wind_speed, humidity = process_weather_forecast(unix_timestamp)
 
     print(temp_c, feels_like_c, wind_speed, humidity)
 
-    station_number_start = int(data['station_number_start'])
-    station_number_end = int(data['station_number_end'])
-
-    year=data['year']
-    month=data['month']
-    day=data['day']
-    hour=data['hour']
-    minute=data['minute']
-    day_of_week=data['day_of_week']
-
-    # temp=data['temp']
-    # feels_like=data['feels_like']
-    # wind_speed=data['wind_speed']
-    # humidity=data['humidity']
-
-    # Get model for this station
+    station_number_start = int(data_from_website['station_number_start'])
+    station_number_end = int(data_from_website['station_number_end'])
 
     model_av = models_availability[station_number_start]
     model_stand=models_bike_stands[station_number_end]
-    # print(model_av)
-    # print(model_stand)
 
-    input_data = [[temp_c,feels_like_c, wind_speed,humidity,year, month, day, hour, minute, day_of_week]]
-    input_data = [[year, month, day, hour, minute, day_of_week]]
+
+    feature_names = ['temp', 'feels_like', 'wind_speed', 'humidity', 'year', 'month', 'day', 'hour', 'minute', 'day_of_week']
+    input_data = pd.DataFrame([[temp_c, feels_like_c, wind_speed, humidity, year, month, day, hour, minute, day_of_week]], columns=feature_names)
 
     prediction_availability = model_av.predict(input_data)
     prediction_bike_stands = model_stand.predict(input_data)
