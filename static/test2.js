@@ -123,8 +123,8 @@ async function initMap() {
       
         // Update the innerHTML of predictionsDiv
         predictionsDiv.innerHTML = `
-          <p>Predicted bike availability at the starting station: ${predictionBikeAvailabilityStart}</p>
-          <p>Predicted bike stand availability at the destination station: ${predictionBikeStandsEnd}</p>
+          <p id= bikePred>Predicted bike availability at the starting station: ${predictionBikeAvailabilityStart}</p>
+          <p id=standPred>Predicted bike stand availability at the destination station: ${predictionBikeStandsEnd}</p>
         `;
       })
       .catch((error) => {
