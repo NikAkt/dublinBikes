@@ -354,7 +354,8 @@ window.myWidgetParam.push({
     s.parentNode.insertBefore(script, s);
 })();
 
-// search buttom event listener
+// Event listener for the "Find Location" button.
+// It gets the user's address input, geocodes it to coordinates, and then centers the map on this location.
 document.getElementById('findLocationButton').addEventListener('click', async function() {
   const address = document.getElementById('addressInput').value;
   try {
@@ -367,7 +368,7 @@ document.getElementById('findLocationButton').addEventListener('click', async fu
   }
 });
 
-// fuction to pop up the location
+// Function to display a marker at the given location on the map.
 function popupLocationOnMap(location) {
   map.setCenter(location); 
   const marker = new google.maps.Marker({
@@ -375,7 +376,8 @@ function popupLocationOnMap(location) {
     map: map
   });}
 
-// Find Cloest Station Buttom event listener
+// Event listener for the "Find Closest Station" button.
+// It finds the nearest bike station to the current map center and updates the global closest station.
 document.getElementById('geocodeButton').addEventListener('click', function() {
   const mapCenter = map.getCenter();
   const closestStation = findClosestStation(mapCenter.toJSON()); 
@@ -383,7 +385,7 @@ document.getElementById('geocodeButton').addEventListener('click', function() {
 });
 
   
-// function to convert the user location to coordinate
+// Function to geocode an address string into coordinates using Google Maps Geocoder.
 async function geocodeAddress(address) {
   const geocoder = new google.maps.Geocoder();
   return new Promise((resolve, reject) => {
@@ -397,7 +399,7 @@ async function geocodeAddress(address) {
   });
 }
 
-// function to find the cloest station 
+// Function to find the closest bike station to a given location.
 function findClosestStation(location) {
   const closestStation = bikeStations.reduce((prev, curr) => {
     const d1 = google.maps.geometry.spherical.computeDistanceBetween(
@@ -424,11 +426,12 @@ function findClosestStation(location) {
 }
 
 
-// set the cloest station as start or end
+// Function to set a bike station as either the start or end point in a selector.
 function setStationAs(selectorId, station) {
   document.querySelector(selectorId).value = `station${station.number}`;
 }
 
+// Event listeners to set the closest station as either the start or end point.
 document.getElementById('setAsStart').addEventListener('click', function() {
   setStationAs('#startSelector select', globalClosestStation);
 });
@@ -437,7 +440,7 @@ document.getElementById('setAsEnd').addEventListener('click', function() {
   setStationAs('#destinationSelector select', globalClosestStation);
 });
 
-// function to resolve the user location to coordinate
+// Function to convert a Place object to coordinates, used with Google Places Autocomplete.
 async function geocodeAddressFromPlace(place) {
   return new Promise((resolve, reject) => {
     if (!place.geometry) {
@@ -448,13 +451,16 @@ async function geocodeAddressFromPlace(place) {
   });
 }
 
-// Autocomplete
+// Setting up Google Maps Autocomplete for the address input field.
 const input = document.getElementById('addressInput');
 const options = {
   componentRestrictions: { country: 'ie' } // Restrict results to Ireland using its country code
 };
 const autocomplete = new google.maps.places.Autocomplete(input, options);
 
+
+// Listener for when a place is selected in the autocomplete field.
+// It geocodes the selected place and updates the map.
 autocomplete.addListener('place_changed', function () {
   const place = autocomplete.getPlace();
   if (!place.geometry) {
@@ -464,7 +470,7 @@ autocomplete.addListener('place_changed', function () {
 });
 
 
-  // call  geocodeAddressFromPlace to convert places to coordinations
+  // call geocodeAddressFromPlace to convert places to coordinations
   geocodeAddressFromPlace(place)
     .then(location => {
       map.setCenter(location);
@@ -474,3 +480,4 @@ autocomplete.addListener('place_changed', function () {
       console.error(error);
       alert("Failed to find location: " + error);
     });
+
