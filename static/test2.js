@@ -115,16 +115,17 @@ async function initMap() {
         })
       .then(response => response.json())
       .then(data => {
-        const predictionBikeAvailabilityStart = data.prediction_bike_availability_start;
-        const predictionBikeStandsEnd = data.prediction_bike_stands_end;
+        const predictionBikeAvailabilityStart = Math.round(data.prediction_bike_availability_start);
+        const predictionBikeStandsEnd = Math.round(data.prediction_bike_stands_end);
       
         // Get the predictionsDiv element
         const predictionsDiv = document.getElementById('predictionsDiv');
       
         // Update the innerHTML of predictionsDiv
         predictionsDiv.innerHTML = `
-          <p id= bikePred>Predicted bike availability at the starting station: ${predictionBikeAvailabilityStart}</p>
-          <p id=standPred>Predicted bike stand availability at the destination station: ${predictionBikeStandsEnd}</p>
+          <h1>Predictions</h3>
+          <p id="bikePred">Starting station bike availability: ${predictionBikeAvailabilityStart}</p>
+          <p id="bikePred">Destination station bike stand availability: ${predictionBikeStandsEnd}</p>
         `;
       })
       .catch((error) => {

@@ -313,3 +313,35 @@ button#goButton {
 #map {
   height: 120%; /* Set the map height to 100% of the parent container */
 }
+
+#bikePred{
+  text-align: left;
+  color: #171616;
+  padding-top: 20px;
+  padding-right: 20px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+#standPred{
+  text-align: left;
+  color: #171616;
+  padding-top: 2px;
+  padding-right: 20px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 15px;
+}
+#message{
+  text-align: left;
+  color: #171616;
+  padding-top: 10px;
+  padding-right: 20px;
+  padding-bottom: 2px;
+  padding-left: 20px;
+  font-weight: bold;
+  font-size: 15px;
+}
