@@ -102,7 +102,7 @@ async function initMap() {
 
         let dateInputValue = document.getElementById('dateInput').value;
         console.log(dateInputValue);
-        fetch('http://localhost:8080/predict', {
+        fetch('http://localhost:80/predict', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
