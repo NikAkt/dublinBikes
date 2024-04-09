@@ -484,17 +484,16 @@ geocodeAddressFromPlace(place)
   });
 
 
-// This function initializes the button for finding empty stations.
+// Function to initializes the button for finding empty stations.(It is called in the end of intMap)
 function initializeFindEmptyStationButton() {
   // Getting the button element by its ID.
   const findEmptyStationButton = document.getElementById('findEmptyStationButton');
 
   // Adding a click event listener to the button.
   findEmptyStationButton.addEventListener('click', function () {
-    // Getting the current center of the map.
     const mapCenter = map.getCenter();
 
-    // Finding the closest station with available stands.
+    // call the function to find the closest station with available stands.
     const closestStationWithStands = findClosestStationWithAvailableStands(mapCenter.toJSON(), availabilityActual);
 
     // Updating the global variable with the closest station.
@@ -502,14 +501,14 @@ function initializeFindEmptyStationButton() {
   });
 }
 
-// This function finds the closest station with available bike stands.
+// Function to find the closest station with available bike stands.
 function findClosestStationWithAvailableStands(location, availabilityActual) {
   // Initialize the shortest distance as Infinity.
   let shortestDistance = Infinity;
   // Initialize the closest station with stands as null.
   let closestStationWithStands = null;
 
-  // Looping through each bike station.
+  
   bikeStations.forEach((station, i) => {
     // Checking if the current station has available bike stands.
     if (availabilityActual[i].available_bike_stands > 0) {
