@@ -147,7 +147,7 @@ async function initMap() {
 
     document.addEventListener("DOMContentLoaded", function () {
       const statsTab = document.getElementById("chartDiv");
-    
+
       statsTab.addEventListener("click", function () {
         // Load and draw the chart when the Stats tab is clicked
         const startStationNumber = startSelector.value.replace("station", "");
@@ -158,42 +158,42 @@ async function initMap() {
     function drawBasic(stationId) {
       // Load the Visualization API and the corechart package
       google.charts.load('current', { 'packages': ['corechart'] });
-  
+
       // Set a callback to run when the Google Visualization API is loaded
       google.charts.setOnLoadCallback(drawChart);
-  
+
       function drawChart() {
-          // Make an AJAX request to get the availability data for the station
-          var jqxhr = $.getJSON("/availability_by_hour/" + stationId, function(data) {
-              var availabilityData = data.availability;
-  
-              var chartData = [['Hour', 'Bikes Available']];
-              for (var i = 0; i < availabilityData.length; i++) {
-                // Convert hour values to numbers
-                var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
-                chartData.push([hour, parseFloat(availabilityData[i].avg_bikes_available)]);
-              }
-  
-              var data = google.visualization.arrayToDataTable(chartData);
-  
-              // Set chart options
-              var options = {
-                  title: 'Bikes Availability By Hour',
-                  hAxis: {
-                      title: 'Hour of the Day'
-                  },
-                  vAxis: {
-                      title: 'Number of Bikes Available'
-                  },
-                  legend: { position: 'none' }
-              };
-  
-              // Instantiate and draw the chart
-              var chart = new google.visualization.LineChart(document.getElementById('chartDiv'));
-              chart.draw(data, options);
-          });
+        // Make an AJAX request to get the availability data for the station
+        var jqxhr = $.getJSON("/availability_by_hour/" + stationId, function (data) {
+          var availabilityData = data.availability;
+
+          var chartData = [['Hour', 'Bikes Available']];
+          for (var i = 0; i < availabilityData.length; i++) {
+            // Convert hour values to numbers
+            var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
+            chartData.push([hour, parseFloat(availabilityData[i].avg_bikes_available)]);
+          }
+
+          var data = google.visualization.arrayToDataTable(chartData);
+
+          // Set chart options
+          var options = {
+            title: 'Bikes Availability By Hour',
+            hAxis: {
+              title: 'Hour of the Day'
+            },
+            vAxis: {
+              title: 'Number of Bikes Available'
+            },
+            legend: { position: 'none' }
+          };
+
+          // Instantiate and draw the chart
+          var chart = new google.visualization.LineChart(document.getElementById('chartDiv'));
+          chart.draw(data, options);
+        });
       }
-  }
+    }
 
     bikeStations = await fetchDublinBikesData();
     availabilityActual = await fetchAvailabilityBikesData();
@@ -260,6 +260,7 @@ async function initMap() {
   } catch (error) {
     console.error("Error importing marker library:", error);
   }
+  initializeFindEmptyStationButton(); //initialize the FindEmptyStation button
 }
 async function fetchDublinBikesData() {
   try {
@@ -351,59 +352,62 @@ function populateDropdown(selector, stations) {
 //openweather buttom and widget
 window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
 window.myWidgetParam.push({
-    id: 23,
-    cityid: '2964574',
-    appid: '43aeecf5b252d71ca98d7f4dd8aaee24', 
-    units: 'metric',
-    containerid: 'openweathermap-widget-23', // Container ID for the first widget
-},{
-    id: 21,
-    cityid: '2964574', 
-    appid: '43aeecf5b252d71ca98d7f4dd8aaee24', 
-    units: 'metric',
-    containerid: 'openweathermap-widget-21', // Container ID for the second widget
+  id: 23,
+  cityid: '2964574',
+  appid: '43aeecf5b252d71ca98d7f4dd8aaee24',
+  units: 'metric',
+  containerid: 'openweathermap-widget-23', // Container ID for the first widget
+}, {
+  id: 21,
+  cityid: '2964574',
+  appid: '43aeecf5b252d71ca98d7f4dd8aaee24',
+  units: 'metric',
+  containerid: 'openweathermap-widget-21', // Container ID for the second widget
 });
 
 // Insert the weather-widget-generator.js script 
-(function() {
-    var script = document.createElement('script');
-    script.async = true;
-    script.charset = "utf-8";
-    script.src = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(script, s);
+(function () {
+  var script = document.createElement('script');
+  script.async = true;
+  script.charset = "utf-8";
+  script.src = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+  var s = document.getElementsByTagName('script')[0];
+  s.parentNode.insertBefore(script, s);
 })();
 
-// search buttom event listener
-document.getElementById('findLocationButton').addEventListener('click', async function() {
+// Event listener for the "Find Location" button.
+// It gets the user's address input, geocodes it to coordinates, and then centers the map on this location.
+document.getElementById('findLocationButton').addEventListener('click', async function () {
   const address = document.getElementById('addressInput').value;
   try {
     const location = await geocodeAddress(address);
-    map.setCenter(location); 
-    popupLocationOnMap(location); 
+    map.setCenter(location);
+    popupLocationOnMap(location);
   } catch (error) {
     console.error(error);
     alert("Geocoding failed: " + error);
   }
 });
 
-// fuction to pop up the location
+// Function to display a marker at the given location on the map.
 function popupLocationOnMap(location) {
-  map.setCenter(location); 
+  map.setCenter(location);
   const marker = new google.maps.Marker({
     position: location,
     map: map
-  });}
+  });
+}
 
-// Find Cloest Station Buttom event listener
-document.getElementById('geocodeButton').addEventListener('click', function() {
+// Event listener for the "Find Closest Station" button.
+// It finds the nearest bike station to the current map center and updates the global closest station.
+document.getElementById('geocodeButton').addEventListener('click', function () {
   const mapCenter = map.getCenter();
-  const closestStation = findClosestStation(mapCenter.toJSON()); 
-  globalClosestStation = closestStation; 
+  const closestStation = findClosestStation(mapCenter.toJSON());
+  globalClosestStation = closestStation;
 });
 
-  
-// function to convert the user location to coordinate
+
+// Function to geocode an address string into coordinates using Google Maps Geocoder.
 async function geocodeAddress(address) {
   const geocoder = new google.maps.Geocoder();
   return new Promise((resolve, reject) => {
@@ -417,7 +421,7 @@ async function geocodeAddress(address) {
   });
 }
 
-// function to find the cloest station 
+// Function to find the closest bike station to a given location.
 function findClosestStation(location) {
   const closestStation = bikeStations.reduce((prev, curr) => {
     const d1 = google.maps.geometry.spherical.computeDistanceBetween(
@@ -440,24 +444,25 @@ function findClosestStation(location) {
 
   // call popupLocationOnMap fun to pop up the closest station location
   popupLocationOnMap(closestStationLocation);
-  return closestStation; 
+  return closestStation;
 }
 
 
-// set the cloest station as start or end
+// Function to set a bike station as either the start or end point in a selector.
 function setStationAs(selectorId, station) {
   document.querySelector(selectorId).value = `station${station.number}`;
 }
 
-document.getElementById('setAsStart').addEventListener('click', function() {
+// Event listeners to set the closest station as either the start or end point.
+document.getElementById('setAsStart').addEventListener('click', function () {
   setStationAs('#startSelector select', globalClosestStation);
 });
 
-document.getElementById('setAsEnd').addEventListener('click', function() {
+document.getElementById('setAsEnd').addEventListener('click', function () {
   setStationAs('#destinationSelector select', globalClosestStation);
 });
 
-// function to resolve the user location to coordinate
+// Function to convert a Place object to coordinates, used with Google Places Autocomplete.
 async function geocodeAddressFromPlace(place) {
   return new Promise((resolve, reject) => {
     if (!place.geometry) {
@@ -468,13 +473,16 @@ async function geocodeAddressFromPlace(place) {
   });
 }
 
-// Autocomplete
+// Setting up Google Maps Autocomplete for the address input field.
 const input = document.getElementById('addressInput');
 const options = {
   componentRestrictions: { country: 'ie' } // Restrict results to Ireland using its country code
 };
 const autocomplete = new google.maps.places.Autocomplete(input, options);
 
+
+// Listener for when a place is selected in the autocomplete field.
+// It geocodes the selected place and updates the map.
 autocomplete.addListener('place_changed', function () {
   const place = autocomplete.getPlace();
   if (!place.geometry) {
@@ -484,13 +492,72 @@ autocomplete.addListener('place_changed', function () {
 });
 
 
-  // call  geocodeAddressFromPlace to convert places to coordinations
-  geocodeAddressFromPlace(place)
-    .then(location => {
-      map.setCenter(location);
-      popupLocationOnMap(location);
-    })
-    .catch(error => {
-      console.error(error);
-      alert("Failed to find location: " + error);
-    });
+// call geocodeAddressFromPlace to convert places to coordinations
+geocodeAddressFromPlace(place)
+  .then(location => {
+    map.setCenter(location);
+    popupLocationOnMap(location);
+  })
+  .catch(error => {
+    console.error(error);
+    alert("Failed to find location: " + error);
+  });
+
+
+// Function to initializes the button for finding empty stations.(It is called in the end of intMap)
+function initializeFindEmptyStationButton() {
+  // Getting the button element by its ID.
+  const findEmptyStationButton = document.getElementById('findEmptyStationButton');
+
+  // Adding a click event listener to the button.
+  findEmptyStationButton.addEventListener('click', function () {
+    const mapCenter = map.getCenter();
+
+    // call the function to find the closest station with available stands.
+    const closestStationWithStands = findClosestStationWithAvailableStands(mapCenter.toJSON(), availabilityActual);
+
+    // Updating the global variable with the closest station.
+    globalClosestStation = closestStationWithStands;
+  });
+}
+
+// Function to find the closest station with available bike stands.
+function findClosestStationWithAvailableStands(location, availabilityActual) {
+  // Initialize the shortest distance as Infinity.
+  let shortestDistance = Infinity;
+  // Initialize the closest station with stands as null.
+  let closestStationWithStands = null;
+
+  
+  bikeStations.forEach((station, i) => {
+    // Checking if the current station has available bike stands.
+    if (availabilityActual[i].available_bike_stands > 0) {
+      // Creating a new LatLng object for the station's location.
+      const stationLocation = new google.maps.LatLng({ lat: station.position_lat, lng: station.position_lng });
+      
+      // Calculating the distance from the given location to the station's location.
+      const distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(location), stationLocation);
+
+      // Updating the closest station if a closer one is found.
+      if (distance < shortestDistance) {
+        shortestDistance = distance;
+        closestStationWithStands = station;
+      }
+    }
+  });
+
+  // If a closest station with available stands is found.
+  if (closestStationWithStands) {
+    // Creating an object for the closest station's coordinates.
+    const closestStationWithStandsCoords = {
+      lat: closestStationWithStands.position_lat,
+      lng: closestStationWithStands.position_lng
+    };
+
+    // Setting the found station as a global variable.
+    globalclosestStationWithStands = closestStationWithStandsCoords;
+
+    // Calling a function to display the found station on the map.
+    popupLocationOnMap(closestStationWithStandsCoords);
+  }
+}
