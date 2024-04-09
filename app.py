@@ -175,67 +175,70 @@ def get_availability_by_hour(station_id):
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    data_from_website = request.get_json()
-    get_weather_forecast()
+    try:
+        data_from_website = request.get_json()
+        get_weather_forecast()
 
-    temp_datetime = (data_from_website['datetime'])
-    print("Current time bro",temp_datetime)
-    temp_datetime = parse(temp_datetime)
+        temp_datetime = (data_from_website['datetime'])
+        print("Current time bro",temp_datetime)
+        temp_datetime = parse(temp_datetime)
 
-    target_times = [0, 3, 6, 9, 12, 15, 18, 21]
-    hour = temp_datetime.hour
+        target_times = [0, 3, 6, 9, 12, 15, 18, 21]
+        hour = temp_datetime.hour
 
-    if hour in target_times:
-        next_hour = hour
-    else:
-        next_hour = min((t for t in target_times if t > hour), default=0)
-        if next_hour == 0:
-            temp_datetime += timedelta(days=1)
+        if hour in target_times:
+            next_hour = hour
+        else:
+            next_hour = min((t for t in target_times if t > hour), default=0)
+            if next_hour == 0:
+                temp_datetime += timedelta(days=1)
 
-    temp_datetime = temp_datetime.replace(hour=next_hour+1, minute=0, second=0, microsecond=0)
-    print("Next hour bro",temp_datetime)
+        temp_datetime = temp_datetime.replace(hour=next_hour+1, minute=0, second=0, microsecond=0)
+        print("Next hour bro",temp_datetime)
 
-    unix_timestamp = int(temp_datetime.timestamp())
-    print("Unix timestamp bro",unix_timestamp)
-    dt = datetime.fromtimestamp(unix_timestamp)
+        unix_timestamp = int(temp_datetime.timestamp())
+        print("Unix timestamp bro",unix_timestamp)
+        dt = datetime.fromtimestamp(unix_timestamp)
 
-    # Extract year, month, day, hour, minute, and day of week
-    year = dt.year
-    month = dt.month
-    day = dt.day
-    hour = dt.hour
-    minute = dt.minute
-    day_of_week = dt.weekday()  # Returns the day of the week as an integer
+        # Extract year, month, day, hour, minute, and day of week
+        year = dt.year
+        month = dt.month
+        day = dt.day
+        hour = dt.hour
+        minute = dt.minute
+        day_of_week = dt.weekday()  # Returns the day of the week as an integer
 
-    print("Year:", year)
-    print("Month:", month)
-    print("Day:", day)
-    print("Hour:", hour)
-    print("Minute:", minute)
-    print("Day of Week:", day_of_week)
+        print("Year:", year)
+        print("Month:", month)
+        print("Day:", day)
+        print("Hour:", hour)
+        print("Minute:", minute)
+        print("Day of Week:", day_of_week)
 
-    temp_c, feels_like_c, wind_speed, humidity = process_weather_forecast(unix_timestamp)
+        temp_c, feels_like_c, wind_speed, humidity = process_weather_forecast(unix_timestamp)
 
-    print(temp_c, feels_like_c, wind_speed, humidity)
+        print(temp_c, feels_like_c, wind_speed, humidity)
 
-    station_number_start = int(data_from_website['station_number_start'])
-    station_number_end = int(data_from_website['station_number_end'])
+        station_number_start = int(data_from_website['station_number_start'])
+        station_number_end = int(data_from_website['station_number_end'])
 
-    model_av = models_availability[station_number_start]
-    model_stand=models_bike_stands[station_number_end]
+        model_av = models_availability[station_number_start]
+        model_stand=models_bike_stands[station_number_end]
 
 
-    feature_names = ['temp', 'feels_like', 'wind_speed', 'humidity', 'year', 'month', 'day', 'hour', 'minute', 'day_of_week']
-    input_data = pd.DataFrame([[temp_c, feels_like_c, wind_speed, humidity, year, month, day, hour, minute, day_of_week]], columns=feature_names)
+        feature_names = ['temp', 'feels_like', 'wind_speed', 'humidity', 'year', 'month', 'day', 'hour', 'minute', 'day_of_week']
+        input_data = pd.DataFrame([[temp_c, feels_like_c, wind_speed, humidity, year, month, day, hour, minute, day_of_week]], columns=feature_names)
 
-    prediction_availability = model_av.predict(input_data)
-    prediction_bike_stands = model_stand.predict(input_data)
+        prediction_availability = model_av.predict(input_data)
+        prediction_bike_stands = model_stand.predict(input_data)
 
-    return {
-        'prediction_bike_availability_start': prediction_availability.tolist(),
+        return {
+            'prediction_bike_availability_start': prediction_availability.tolist(),
 
-        'prediction_bike_stands_end': prediction_bike_stands.tolist()
-    }
+            'prediction_bike_stands_end': prediction_bike_stands.tolist()
+        }
+    except Exception as e:
+        return jsonify(error=str(e)), 400
 if __name__ == "__main__":
     app.run(debug=True,host="0.0.0.0",port=8080)
     
