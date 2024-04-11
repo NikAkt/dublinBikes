@@ -314,6 +314,20 @@ button#goButton {
   height: 120%; /* Set the map height to 100% of the parent container */
 }
 
+#chartsDiv{
+  height: 50%;
+  display: block;
+  width: 100%;
+}
+
+
+#chartsDiv{
+  height: 50%;
+  display: block;
+  width: 100%;
+}
+
+
 #bikePred{
   text-align: left;
   color: #171616;

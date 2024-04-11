@@ -142,31 +142,81 @@ def get_availability_by_hour(station_id):
     
     with connection:
         with connection.cursor() as cursor:
-            cursor.execute(f"""
+            cursor.execute("""
                 SELECT 
-                           DATE_FORMAT(hours.hour_start, '%H:00:00') AS hour_start,
-                           AVG(availability.available_bikes) AS avg_bikes_available
+                    CONCAT(HOUR(curr_time), ':00:00') AS hour_start,
+                    AVG(available_bikes) AS avg_bikes_available
                 FROM
-                           (SELECT 
-                           DATE_ADD(DATE_FORMAT(NOW(), '%Y-%m-%d'), INTERVAL hour HOUR) AS hour_start
-                FROM
-        (SELECT 0 AS hour UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3
-        UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
-        UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11
-        UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15
-        UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19
-        UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23) AS hours
-        ) AS hours
-                LEFT JOIN
-                     dbikes.availability AS availability ON hours.hour_start = DATE_FORMAT(availability.curr_time, '%Y-%m-%d %H:00:00')
-                WHERE 
-                           availability.number = 3
+                    (SELECT 
+                        curr_time,
+                        available_bikes
+                    FROM
+                        availability
+                    WHERE
+                        number = %s
+                        AND DATE(curr_time) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) AS subquery
+                RIGHT JOIN
+                    (SELECT 0 AS hour UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3
+                    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
+                    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11
+                    UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15
+                    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19
+                    UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23) AS hours
+                ON
+                    HOUR(subquery.curr_time) = hours.hour
                 GROUP BY 
-                           hour_start
+                    hour_start
                 ORDER BY 
-                           hour_start;
-                           """)
+                    HOUR(subquery.curr_time);  -- Ordering by the hour value
+            """, (station_id,))
             rows = cursor.fetchall()
+            
+            for row in rows:
+                availability.append(dict(row))
+
+    return jsonify(availability=availability)
+
+@app.route("/stands_by_hour/<int:station_id>")
+def get_stands_by_hour(station_id):
+    host = 'se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com'
+    user = 'admin'
+    password = 'widzEh-kuwriz-0menki'
+    db = 'dbikes'
+    availability = []
+
+    connection = pymysql.connect(host=host, user=user, password=password, db=db, cursorclass=DictCursor)
+    
+    with connection:
+        with connection.cursor() as cursor:
+            cursor.execute("""
+                SELECT 
+                    CONCAT(HOUR(curr_time), ':00:00') AS hour_start,
+                    AVG(available_bike_stands) AS avg_stands_available
+                FROM
+                    (SELECT 
+                        curr_time,
+                        available_bike_stands
+                    FROM
+                        availability
+                    WHERE
+                        number = %s
+                        AND DATE(curr_time) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)) AS subquery
+                RIGHT JOIN
+                    (SELECT 0 AS hour UNION ALL SELECT 1 UNION ALL SELECT 2 UNION ALL SELECT 3
+                    UNION ALL SELECT 4 UNION ALL SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7
+                    UNION ALL SELECT 8 UNION ALL SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11
+                    UNION ALL SELECT 12 UNION ALL SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15
+                    UNION ALL SELECT 16 UNION ALL SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19
+                    UNION ALL SELECT 20 UNION ALL SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23) AS hours
+                ON
+                    HOUR(subquery.curr_time) = hours.hour
+                GROUP BY 
+                    hour_start
+                ORDER BY 
+                    HOUR(subquery.curr_time);  -- Ordering by the hour value
+            """, (station_id,))
+            rows = cursor.fetchall()
+
             
             for row in rows:
                 availability.append(dict(row))

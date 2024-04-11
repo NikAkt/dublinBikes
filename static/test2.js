@@ -99,7 +99,8 @@ async function initMap() {
         const endStation = bikeStations.find(
           (station) => station.number == endStationNumber
         );
-
+        drawBasic(startStationNumber);
+        drawBasic2(endStationNumber);  
         let dateInputValue = document.getElementById('dateInput').value;
         console.log(dateInputValue);
         fetch('http://13.48.147.216/predict', {
@@ -131,8 +132,6 @@ async function initMap() {
       .catch((error) => {
         console.error('Error:', error);
       });
-        drawBasic(startStationNumber);
-        drawBasic(endStationNumber);
 
         if (startStation && endStation) {
           const request = {
@@ -157,50 +156,98 @@ async function initMap() {
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      const statsTab = document.getElementById("chartDiv");
-
+      const statsTab = document.getElementById("statsTab");
+      const startSelector = document.querySelector("#startSelector select");
+      const endSelector = document.querySelector("#destinationSelector select");
+    
       statsTab.addEventListener("click", function () {
-        // Load and draw the chart when the Stats tab is clicked
         const startStationNumber = startSelector.value.replace("station", "");
+        const endStationNumber = endSelector.value.replace("station", "");
         drawBasic(startStationNumber);
+        drawBasic2(endStationNumber);  
       });
     });
-
+    
     function drawBasic(stationId) {
       // Load the Visualization API and the corechart package
       google.charts.load('current', { 'packages': ['corechart'] });
-
+    
       // Set a callback to run when the Google Visualization API is loaded
       google.charts.setOnLoadCallback(drawChart);
-
+    
       function drawChart() {
         // Make an AJAX request to get the availability data for the station
-        var jqxhr = $.getJSON("/availability_by_hour/" + stationId, function (data) {
+        var jqxhr = $.getJSON("/availability_by_hour/" + stationId, function(data) {
           var availabilityData = data.availability;
-
+    
           var chartData = [['Hour', 'Bikes Available']];
           for (var i = 0; i < availabilityData.length; i++) {
             // Convert hour values to numbers
             var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
             chartData.push([hour, parseFloat(availabilityData[i].avg_bikes_available)]);
           }
-
+    
           var data = google.visualization.arrayToDataTable(chartData);
-
+    
           // Set chart options
           var options = {
-            title: 'Bikes Availability By Hour',
-            hAxis: {
-              title: 'Hour of the Day'
-            },
-            vAxis: {
-              title: 'Number of Bikes Available'
-            },
-            legend: { position: 'none' }
+              title: 'Bikes Availability By Hour',
+              hAxis: {
+                  title: 'Hour of the Day'
+              },
+              vAxis: {
+                  title: 'Number of Bikes Available'
+              },
+              legend: { position: 'none' },
+              width: 300
           };
-
+    
           // Instantiate and draw the chart
-          var chart = new google.visualization.LineChart(document.getElementById('chartDiv'));
+          var chart = new google.visualization.LineChart(document.getElementById('chartsDiv1'));
+          chart.draw(data, options);
+        });
+      }
+    }
+    
+    function drawBasic2(stationId) {
+      // Load the Visualization API and the corechart package
+      google.charts.load('current', { 'packages': ['corechart'] });
+      google.charts.setOnLoadCallback(drawChart2);
+    
+      // Set a callback to run when the Google Visualization API is loaded
+
+    
+      function drawChart2() {
+        // Make an AJAX request to get the availability data for the station
+        var jqxhr = $.getJSON("/stands_by_hour/" + stationId, function(data) {
+          console.log("Stands Data:", data);
+          var availabilityData = data.availability;
+    
+          var chartData = [['Hour', ' Available']];
+          for (var i = 0; i < availabilityData.length; i++) {
+            // Convert hour values to numbers
+            var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
+            chartData.push([hour, parseFloat(availabilityData[i].avg_stands_available)]);
+          }
+          console.log("Chart Data:", chartData);
+    
+          var data = google.visualization.arrayToDataTable(chartData);
+    
+          // Set chart options
+          var options = {
+              title: 'Stands Availability By Hour',
+              hAxis: {
+                  title: 'Hour of the Day'
+              },
+              vAxis: {
+                  title: 'Number of Stands Available'
+              },
+              legend: { position: 'none' },
+              width: 300
+          };
+    
+          // Instantiate and draw the chart
+          var chart = new google.visualization.LineChart(document.getElementById('chartsDiv2'));
           chart.draw(data, options);
         });
       }
