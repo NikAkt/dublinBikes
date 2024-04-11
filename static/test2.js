@@ -540,6 +540,14 @@ function findClosestStation(location) {
 
 // Function to set a bike station as either the start or end point in a selector.
 function setStationAs(selectorId, station) {
+  if (!station) {
+    console.error("Error: station is null or undefined");
+    alert(
+      "Only a station can be set as the start or end station. Please select the closest station to your location using the 'Find Closest Station' button."
+    );
+
+    return;
+  }
   document.querySelector(selectorId).value = `station${station.number}`;
 }
 
@@ -581,15 +589,15 @@ autocomplete.addListener("place_changed", function () {
 });
 
 // call geocodeAddressFromPlace to convert places to coordinations
-geocodeAddressFromPlace(place)
-  .then((location) => {
-    map.setCenter(location);
-    popupLocationOnMap(location);
-  })
-  .catch((error) => {
-    console.error(error);
-    alert("Failed to find location: " + error);
-  });
+// geocodeAddressFromPlace(place)
+//   .then((location) => {
+//     map.setCenter(location);
+//     popupLocationOnMap(location);
+//   })
+//   .catch((error) => {
+//     console.error(error);
+//     alert("Failed to find location: " + error);
+//   });
 
 // Function to initializes the button for finding empty stations.(It is called in the end of intMap)
 function initializeFindEmptyStationButton() {
