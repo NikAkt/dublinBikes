@@ -273,7 +273,7 @@ def predict():
         get_weather_forecast()
 
         temp_datetime = data_from_website["datetime"]
-        print("Current time bro", temp_datetime)
+        print("Current time", temp_datetime)
         temp_datetime = parse(temp_datetime)
 
         target_times = [0, 3, 6, 9, 12, 15, 18, 21]
@@ -289,10 +289,10 @@ def predict():
         temp_datetime = temp_datetime.replace(
             hour=next_hour + 1, minute=0, second=0, microsecond=0
         )
-        print("Next hour bro", temp_datetime)
+        print("Next hour", temp_datetime)
 
         unix_timestamp = int(temp_datetime.timestamp())
-        print("Unix timestamp bro", unix_timestamp)
+        print("Unix timestamp", unix_timestamp)
         dt = datetime.fromtimestamp(unix_timestamp)
 
         # Extract year, month, day, hour, minute, and day of week
