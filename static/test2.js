@@ -124,7 +124,7 @@ async function initMap() {
       
         // Update the innerHTML of predictionsDiv
         predictionsDiv.innerHTML = `
-          <h1>Predictions</h3>
+          <h1>Predictions</h1>
           <p id="bikePred">Starting station bike availability: ${predictionBikeAvailabilityStart}</p>
           <p id="bikePred">Destination station bike stand availability: ${predictionBikeStandsEnd}</p>
         `;

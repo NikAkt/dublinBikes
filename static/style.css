@@ -331,7 +331,7 @@ button#goButton {
 #bikePred{
   text-align: left;
   color: #171616;
-  padding-top: 20px;
+  padding-top: 0px;
   padding-right: 20px;
   padding-bottom: 2px;
   padding-left: 20px;
@@ -342,7 +342,7 @@ button#goButton {
 #standPred{
   text-align: left;
   color: #171616;
-  padding-top: 2px;
+  padding-top: 0px;
   padding-right: 20px;
   padding-bottom: 2px;
   padding-left: 20px;
