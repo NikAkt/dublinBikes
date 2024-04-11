@@ -35,46 +35,46 @@ h2 {
   right: 2%;
   align-items: center;
   max-height: 82%;
-  background-color:#ffffff;
+  background-color: #ffffff;
   border: 3px solid #ffffff;
-  border-radius: .8em;
+  border-radius: 0.8em;
   box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
   transition: background-color 0.3s ease;
   display: flexbox;
   border: 2px solid transparent;
 }
 
-#openweathermap-widget-23{
+#openweathermap-widget-23 {
   border: 2px solid transparent;
 }
 
-.active #openweathermap-widget-23:hover, #weatherButton:hover{
+.active #openweathermap-widget-23:hover,
+#weatherButton:hover {
   cursor: pointer;
   box-shadow: #171616;
   border: 2px solid yellow;
 }
 
-#dropdownArrow{
-    float: right;
-    width: 0.8em;
-    display: flex;
-    margin-right: 10%;
-    padding-right: 2%;
+#dropdownArrow {
+  float: right;
+  width: 0.8em;
+  display: flex;
+  margin-right: 10%;
+  padding-right: 2%;
 }
 
 #weatherContent {
-    border-radius: .5em;
-    display: none;
-    overflow: hidden;
-    background-color:  #f1f1f1;
-    width:auto;
-    position: absolute;
-    top: calc(15% + 70%);
-    right: 2%;
-    box-shadow: 0 0.5em  1em rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+  border-radius: 0.5em;
+  display: none;
+  overflow: hidden;
+  background-color: #f1f1f1;
+  width: auto;
+  position: absolute;
+  top: calc(15% + 70%);
+  right: 2%;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+  z-index: 1000;
 }
-
 
 /*Temporary Map Image*/
 #temporaryMap {
@@ -169,7 +169,7 @@ h2 {
 
 /* Base styling for the entire search bar area */
 .location-search {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   text-align: center;
   max-width: 400px;
   display: flex;
@@ -183,15 +183,13 @@ h2 {
 
 .flex-item {
   margin: 2px;
-  flex: 1; 
+  flex: 1;
 }
-
 
 #addressInput {
-  flex-grow: 8; 
-  margin-right: 2px; 
+  flex-grow: 8;
+  margin-right: 2px;
 }
-
 
 .location-search button {
   flex-grow: 1;
@@ -240,7 +238,6 @@ h2 {
   background-color: #80bbc9;
 }
 
-
 /* Base styling for selectors and buttons */
 select,
 button#goButton {
@@ -263,8 +260,6 @@ button#goButton {
   transition: background-color 0.3s;
 }
 
-
-
 /* Styles for dropdowns, matching the location search input field */
 #startSelector select,
 #destinationSelector select,
@@ -272,7 +267,6 @@ button#goButton {
   display: block;
   box-sizing: border-box;
 }
-
 
 /* Adjust the general div containers */
 #startSelector,
@@ -283,11 +277,9 @@ button#goButton {
   margin: auto;
 }
 
-
 #spaceSelector {
   margin-bottom: 10px;
 }
-
 
 #map-container {
   width: 100%; /* Set the width to 100% of the viewport width */
@@ -301,21 +293,19 @@ button#goButton {
   height: 120%; /* Set the map height to 100% of the parent container */
 }
 
-#chartsDiv{
+#chartsDiv {
   height: 50%;
   display: block;
   width: 100%;
 }
 
-
-#chartsDiv{
+#chartsDiv {
   height: 50%;
   display: block;
   width: 100%;
 }
 
-
-#bikePred{
+#bikePred {
   text-align: left;
   color: #171616;
   padding-top: 0px;
@@ -326,7 +316,7 @@ button#goButton {
   font-size: 15px;
 }
 
-#standPred{
+#standPred {
   text-align: left;
   color: #171616;
   padding-top: 0px;
@@ -336,7 +326,7 @@ button#goButton {
   font-weight: bold;
   font-size: 15px;
 }
-#message{
+#message {
   text-align: left;
   color: #171616;
   padding-top: 10px;

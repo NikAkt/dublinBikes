@@ -89,6 +89,22 @@ async function initMap() {
       const goButton = document.getElementById("goButton");
 
       goButton.addEventListener("click", function () {
+        const statsLabel = document.getElementById("statsLabel");
+
+        let isHighlighted = false;
+        const blinkInterval = setInterval(() => {
+          if (isHighlighted) {
+            statsLabel.style.backgroundColor = "";
+          } else {
+            statsLabel.style.backgroundColor = "#ffffcc";
+          }
+          isHighlighted = !isHighlighted;
+        }, 100); // Blink every 100 milliseconds
+
+        setTimeout(() => {
+          clearInterval(blinkInterval);
+          statsLabel.style.backgroundColor = "#ffffcc"; // Reset to original color
+        }, 1000);
         const startStationNumber = startSelector.value.replace("station", "");
         const startStation = bikeStations.find(
           (station) => station.number == startStationNumber
