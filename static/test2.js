@@ -99,6 +99,8 @@ async function initMap() {
         const endStation = bikeStations.find(
           (station) => station.number == endStationNumber
         );
+        let esn= endStationNumber;
+        let ssn= startStationNumber;
         drawBasic(startStationNumber);
         drawBasic2(endStationNumber);  
         let dateInputValue = document.getElementById('dateInput').value;
@@ -110,8 +112,8 @@ async function initMap() {
         },
         body: JSON.stringify({
           datetime: dateInputValue,
-          station_number_start: startStationNumber,
-          station_number_end: endStationNumber,
+          station_number_start: esn,
+          station_number_end: ssn,
         }),
         })
       .then(response => response.json())
