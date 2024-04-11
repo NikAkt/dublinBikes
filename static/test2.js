@@ -103,7 +103,7 @@ async function initMap() {
 
         setTimeout(() => {
           clearInterval(blinkInterval);
-          statsLabel.style.backgroundColor = "#ffffcc"; // Reset to original color
+          statsLabel.style.backgroundColor = "#ffffcc";
         }, 1000);
         const startStationNumber = startSelector.value.replace("station", "");
         const startStation = bikeStations.find(
@@ -251,8 +251,6 @@ async function initMap() {
       // Load the Visualization API and the corechart package
       google.charts.load("current", { packages: ["corechart"] });
       google.charts.setOnLoadCallback(drawChart2);
-
-      // Set a callback to run when the Google Visualization API is loaded
 
       function drawChart2() {
         // Make an AJAX request to get the availability data for the station
@@ -468,7 +466,6 @@ window.myWidgetParam.push(
   }
 );
 
-// Insert the weather-widget-generator.js script
 (function () {
   var script = document.createElement("script");
   script.async = true;
@@ -604,62 +601,41 @@ autocomplete.addListener("place_changed", function () {
   }
 });
 
-// call geocodeAddressFromPlace to convert places to coordinations
-// geocodeAddressFromPlace(place)
-//   .then((location) => {
-//     map.setCenter(location);
-//     popupLocationOnMap(location);
-//   })
-//   .catch((error) => {
-//     console.error(error);
-//     alert("Failed to find location: " + error);
-//   });
-
 // Function to initializes the button for finding empty stations.(It is called in the end of intMap)
 function initializeFindEmptyStationButton() {
-  // Getting the button element by its ID.
   const findEmptyStationButton = document.getElementById(
     "findEmptyStationButton"
   );
 
-  // Adding a click event listener to the button.
   findEmptyStationButton.addEventListener("click", function () {
     const mapCenter = map.getCenter();
 
-    // call the function to find the closest station with available stands.
     const closestStationWithStands = findClosestStationWithAvailableStands(
       mapCenter.toJSON(),
       availabilityActual
     );
 
-    // Updating the global variable with the closest station.
     globalClosestStation = closestStationWithStands;
   });
 }
 
 // Function to find the closest station with available bike stands.
 function findClosestStationWithAvailableStands(location, availabilityActual) {
-  // Initialize the shortest distance as Infinity.
   let shortestDistance = Infinity;
-  // Initialize the closest station with stands as null.
   let closestStationWithStands = null;
 
   bikeStations.forEach((station, i) => {
-    // Checking if the current station has available bike stands.
     if (availabilityActual[i].available_bike_stands > 0) {
-      // Creating a new LatLng object for the station's location.
       const stationLocation = new google.maps.LatLng({
         lat: station.position_lat,
         lng: station.position_lng,
       });
 
-      // Calculating the distance from the given location to the station's location.
       const distance = google.maps.geometry.spherical.computeDistanceBetween(
         new google.maps.LatLng(location),
         stationLocation
       );
 
-      // Updating the closest station if a closer one is found.
       if (distance < shortestDistance) {
         shortestDistance = distance;
         closestStationWithStands = station;
@@ -675,10 +651,7 @@ function findClosestStationWithAvailableStands(location, availabilityActual) {
       lng: closestStationWithStands.position_lng,
     };
 
-    // Setting the found station as a global variable.
     globalclosestStationWithStands = closestStationWithStandsCoords;
-
-    // Calling a function to display the found station on the map.
     popupLocationOnMap(closestStationWithStandsCoords);
   }
 }
