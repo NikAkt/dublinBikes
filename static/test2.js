@@ -106,15 +106,15 @@ async function initMap() {
         let dateInputValue = document.getElementById('dateInput').value;
         console.log(dateInputValue);
         fetch('http://13.48.147.216/predict', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          datetime: dateInputValue,
-          station_number_start: esn,
-          station_number_end: ssn,
-        }),
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            datetime: dateInputValue,
+            station_number_start: ssn,
+            station_number_end: esn,
+          }),
         })
       .then(response => response.json())
       .then(data => {
