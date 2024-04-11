@@ -6,4 +6,3 @@ static/Images/.DS_Store
 __pycache__/
 __pycache__/app.cpython-311.pyc
 **/__pycache__/ 
-*.json
