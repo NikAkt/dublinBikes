@@ -5,7 +5,6 @@ let availability;
 let map;
 let globalClosestStation = null;
 
-
 const createMarkers = (map, bikeStations, availabilityActual) => {
   bikeStations.forEach((station, i) => {
     let markerColor;
@@ -99,16 +98,16 @@ async function initMap() {
         const endStation = bikeStations.find(
           (station) => station.number == endStationNumber
         );
-        let esn= endStationNumber;
-        let ssn= startStationNumber;
+        let esn = endStationNumber;
+        let ssn = startStationNumber;
         drawBasic(startStationNumber);
-        drawBasic2(endStationNumber);  
-        let dateInputValue = document.getElementById('dateInput').value;
+        drawBasic2(endStationNumber);
+        let dateInputValue = document.getElementById("dateInput").value;
         console.log(dateInputValue);
-        fetch('http://13.48.147.216/predict', {
-          method: 'POST',
+        fetch("http://localhost:8080/predict", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             datetime: dateInputValue,
@@ -116,24 +115,35 @@ async function initMap() {
             station_number_end: esn,
           }),
         })
-      .then(response => response.json())
-      .then(data => {
-        const predictionBikeAvailabilityStart = Math.round(data.prediction_bike_availability_start);
-        const predictionBikeStandsEnd = Math.round(data.prediction_bike_stands_end);
-      
-        // Get the predictionsDiv element
-        const predictionsDiv = document.getElementById('predictionsDiv');
-      
-        // Update the innerHTML of predictionsDiv
-        predictionsDiv.innerHTML = `
-          <h1>Predictions</h1>
-          <p id="bikePred">Starting station bike availability: ${predictionBikeAvailabilityStart}</p>
-          <p id="bikePred">Destination station bike stand availability: ${predictionBikeStandsEnd}</p>
-        `;
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-      });
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((data) => {
+            const predictionBikeAvailabilityStart = Math.round(
+              data.prediction_bike_availability_start
+            );
+            const predictionBikeStandsEnd = Math.round(
+              data.prediction_bike_stands_end
+            );
+
+            // Get the predictionsDiv element
+            const predictionsDiv = document.getElementById("predictionsDiv");
+
+            // Update the innerHTML of predictionsDiv
+            predictionsDiv.innerHTML = `
+    <h1>Predictions</h1>
+    <p id="bikePred">Starting station bike availability: ${predictionBikeAvailabilityStart}</p>
+    <p id="bikePred">Destination station bike stand availability: ${predictionBikeStandsEnd}</p>
+  `;
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+            const predictionsDiv = document.getElementById("predictionsDiv");
+            predictionsDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+          });
 
         if (startStation && endStation) {
           const request = {
@@ -161,95 +171,109 @@ async function initMap() {
       const statsTab = document.getElementById("statsTab");
       const startSelector = document.querySelector("#startSelector select");
       const endSelector = document.querySelector("#destinationSelector select");
-    
+
       statsTab.addEventListener("click", function () {
         const startStationNumber = startSelector.value.replace("station", "");
         const endStationNumber = endSelector.value.replace("station", "");
         drawBasic(startStationNumber);
-        drawBasic2(endStationNumber);  
+        drawBasic2(endStationNumber);
       });
     });
-    
+
     function drawBasic(stationId) {
       // Load the Visualization API and the corechart package
-      google.charts.load('current', { 'packages': ['corechart'] });
-    
+      google.charts.load("current", { packages: ["corechart"] });
+
       // Set a callback to run when the Google Visualization API is loaded
       google.charts.setOnLoadCallback(drawChart);
-    
+
       function drawChart() {
         // Make an AJAX request to get the availability data for the station
-        var jqxhr = $.getJSON("/availability_by_hour/" + stationId, function(data) {
-          var availabilityData = data.availability;
-    
-          var chartData = [['Hour', 'Bikes Available']];
-          for (var i = 0; i < availabilityData.length; i++) {
-            // Convert hour values to numbers
-            var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
-            chartData.push([hour, parseFloat(availabilityData[i].avg_bikes_available)]);
-          }
-    
-          var data = google.visualization.arrayToDataTable(chartData);
-    
-          // Set chart options
-          var options = {
-              title: 'Bikes Availability By Hour',
+        var jqxhr = $.getJSON(
+          "/availability_by_hour/" + stationId,
+          function (data) {
+            var availabilityData = data.availability;
+
+            var chartData = [["Hour", "Bikes Available"]];
+            for (var i = 0; i < availabilityData.length; i++) {
+              // Convert hour values to numbers
+              var hour = parseInt(
+                availabilityData[i].hour_start.substring(0, 2)
+              );
+              chartData.push([
+                hour,
+                parseFloat(availabilityData[i].avg_bikes_available),
+              ]);
+            }
+
+            var data = google.visualization.arrayToDataTable(chartData);
+
+            // Set chart options
+            var options = {
+              title: "Bikes Availability By Hour",
               hAxis: {
-                  title: 'Hour of the Day'
+                title: "Hour of the Day",
               },
               vAxis: {
-                  title: 'Number of Bikes Available'
+                title: "Number of Bikes Available",
               },
-              legend: { position: 'none' },
-              width: 300
-          };
-    
-          // Instantiate and draw the chart
-          var chart = new google.visualization.LineChart(document.getElementById('chartsDiv1'));
-          chart.draw(data, options);
-        });
+              legend: { position: "none" },
+              width: 300,
+            };
+
+            // Instantiate and draw the chart
+            var chart = new google.visualization.LineChart(
+              document.getElementById("chartsDiv1")
+            );
+            chart.draw(data, options);
+          }
+        );
       }
     }
-    
+
     function drawBasic2(stationId) {
       // Load the Visualization API and the corechart package
-      google.charts.load('current', { 'packages': ['corechart'] });
+      google.charts.load("current", { packages: ["corechart"] });
       google.charts.setOnLoadCallback(drawChart2);
-    
+
       // Set a callback to run when the Google Visualization API is loaded
 
-    
       function drawChart2() {
         // Make an AJAX request to get the availability data for the station
-        var jqxhr = $.getJSON("/stands_by_hour/" + stationId, function(data) {
+        var jqxhr = $.getJSON("/stands_by_hour/" + stationId, function (data) {
           console.log("Stands Data:", data);
           var availabilityData = data.availability;
-    
-          var chartData = [['Hour', ' Available']];
+
+          var chartData = [["Hour", " Available"]];
           for (var i = 0; i < availabilityData.length; i++) {
             // Convert hour values to numbers
             var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
-            chartData.push([hour, parseFloat(availabilityData[i].avg_stands_available)]);
+            chartData.push([
+              hour,
+              parseFloat(availabilityData[i].avg_stands_available),
+            ]);
           }
           console.log("Chart Data:", chartData);
-    
+
           var data = google.visualization.arrayToDataTable(chartData);
-    
+
           // Set chart options
           var options = {
-              title: 'Stands Availability By Hour',
-              hAxis: {
-                  title: 'Hour of the Day'
-              },
-              vAxis: {
-                  title: 'Number of Stands Available'
-              },
-              legend: { position: 'none' },
-              width: 300
+            title: "Stands Availability By Hour",
+            hAxis: {
+              title: "Hour of the Day",
+            },
+            vAxis: {
+              title: "Number of Stands Available",
+            },
+            legend: { position: "none" },
+            width: 300,
           };
-    
+
           // Instantiate and draw the chart
-          var chart = new google.visualization.LineChart(document.getElementById('chartsDiv2'));
+          var chart = new google.visualization.LineChart(
+            document.getElementById("chartsDiv2")
+          );
           chart.draw(data, options);
         });
       }
@@ -410,72 +434,79 @@ function populateDropdown(selector, stations) {
 }
 
 //openweather buttom and widget
-window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = [];
-window.myWidgetParam.push({
-  id: 23,
-  cityid: '2964574',
-  appid: '43aeecf5b252d71ca98d7f4dd8aaee24',
-  units: 'metric',
-  containerid: 'openweathermap-widget-23', // Container ID for the first widget
-}, {
-  id: 21,
-  cityid: '2964574',
-  appid: '43aeecf5b252d71ca98d7f4dd8aaee24',
-  units: 'metric',
-  containerid: 'openweathermap-widget-21', // Container ID for the second widget
-});
+window.myWidgetParam ? window.myWidgetParam : (window.myWidgetParam = []);
+window.myWidgetParam.push(
+  {
+    id: 23,
+    cityid: "2964574",
+    appid: "43aeecf5b252d71ca98d7f4dd8aaee24",
+    units: "metric",
+    containerid: "openweathermap-widget-23", // Container ID for the first widget
+  },
+  {
+    id: 21,
+    cityid: "2964574",
+    appid: "43aeecf5b252d71ca98d7f4dd8aaee24",
+    units: "metric",
+    containerid: "openweathermap-widget-21", // Container ID for the second widget
+  }
+);
 
-// Insert the weather-widget-generator.js script 
+// Insert the weather-widget-generator.js script
 (function () {
-  var script = document.createElement('script');
+  var script = document.createElement("script");
   script.async = true;
   script.charset = "utf-8";
-  script.src = "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
-  var s = document.getElementsByTagName('script')[0];
+  script.src =
+    "https://openweathermap.org/themes/openweathermap/assets/vendor/owm/js/weather-widget-generator.js";
+  var s = document.getElementsByTagName("script")[0];
   s.parentNode.insertBefore(script, s);
 })();
 
 // Event listener for the "Find Location" button.
 // It gets the user's address input, geocodes it to coordinates, and then centers the map on this location.
-document.getElementById('findLocationButton').addEventListener('click', async function () {
-  const address = document.getElementById('addressInput').value;
-  try {
-    const location = await geocodeAddress(address);
-    map.setCenter(location);
-    popupLocationOnMap(location);
-  } catch (error) {
-    console.error(error);
-    alert("Geocoding failed: " + error);
-  }
-});
+document
+  .getElementById("findLocationButton")
+  .addEventListener("click", async function () {
+    const address = document.getElementById("addressInput").value;
+    try {
+      const location = await geocodeAddress(address);
+      map.setCenter(location);
+      popupLocationOnMap(location);
+    } catch (error) {
+      console.error(error);
+      alert("Geocoding failed: " + error);
+    }
+  });
 
 // Function to display a marker at the given location on the map.
 function popupLocationOnMap(location) {
   map.setCenter(location);
   const marker = new google.maps.Marker({
     position: location,
-    map: map
+    map: map,
   });
 }
 
 // Event listener for the "Find Closest Station" button.
 // It finds the nearest bike station to the current map center and updates the global closest station.
-document.getElementById('geocodeButton').addEventListener('click', function () {
+document.getElementById("geocodeButton").addEventListener("click", function () {
   const mapCenter = map.getCenter();
   const closestStation = findClosestStation(mapCenter.toJSON());
   globalClosestStation = closestStation;
 });
 
-
 // Function to geocode an address string into coordinates using Google Maps Geocoder.
 async function geocodeAddress(address) {
   const geocoder = new google.maps.Geocoder();
   return new Promise((resolve, reject) => {
-    geocoder.geocode({ 'address': address }, (results, status) => {
-      if (status === 'OK') {
+    geocoder.geocode({ address: address }, (results, status) => {
+      if (status === "OK") {
         resolve(results[0].geometry.location);
       } else {
-        reject('Geocode was not successful for the following reason: ' + status);
+        reject(
+          "Geocode was not successful for the following reason: " + status
+        );
       }
     });
   });
@@ -498,15 +529,14 @@ function findClosestStation(location) {
   // get the closest station location
   const closestStationLocation = {
     lat: closestStation.position_lat,
-    lng: closestStation.position_lng
+    lng: closestStation.position_lng,
   };
-  globalClosestStation = closestStation;// set it as a global var
+  globalClosestStation = closestStation; // set it as a global var
 
   // call popupLocationOnMap fun to pop up the closest station location
   popupLocationOnMap(closestStationLocation);
   return closestStation;
 }
-
 
 // Function to set a bike station as either the start or end point in a selector.
 function setStationAs(selectorId, station) {
@@ -514,19 +544,19 @@ function setStationAs(selectorId, station) {
 }
 
 // Event listeners to set the closest station as either the start or end point.
-document.getElementById('setAsStart').addEventListener('click', function () {
-  setStationAs('#startSelector select', globalClosestStation);
+document.getElementById("setAsStart").addEventListener("click", function () {
+  setStationAs("#startSelector select", globalClosestStation);
 });
 
-document.getElementById('setAsEnd').addEventListener('click', function () {
-  setStationAs('#destinationSelector select', globalClosestStation);
+document.getElementById("setAsEnd").addEventListener("click", function () {
+  setStationAs("#destinationSelector select", globalClosestStation);
 });
 
 // Function to convert a Place object to coordinates, used with Google Places Autocomplete.
 async function geocodeAddressFromPlace(place) {
   return new Promise((resolve, reject) => {
     if (!place.geometry) {
-      reject('No location found for the entered place.');
+      reject("No location found for the entered place.");
     } else {
       resolve(place.geometry.location);
     }
@@ -534,16 +564,15 @@ async function geocodeAddressFromPlace(place) {
 }
 
 // Setting up Google Maps Autocomplete for the address input field.
-const input = document.getElementById('addressInput');
+const input = document.getElementById("addressInput");
 const options = {
-  componentRestrictions: { country: 'ie' } // Restrict results to Ireland using its country code
+  componentRestrictions: { country: "ie" }, // Restrict results to Ireland using its country code
 };
 const autocomplete = new google.maps.places.Autocomplete(input, options);
 
-
 // Listener for when a place is selected in the autocomplete field.
 // It geocodes the selected place and updates the map.
-autocomplete.addListener('place_changed', function () {
+autocomplete.addListener("place_changed", function () {
   const place = autocomplete.getPlace();
   if (!place.geometry) {
     console.log("No details available for input: '" + place.name + "'");
@@ -551,30 +580,33 @@ autocomplete.addListener('place_changed', function () {
   }
 });
 
-
 // call geocodeAddressFromPlace to convert places to coordinations
 geocodeAddressFromPlace(place)
-  .then(location => {
+  .then((location) => {
     map.setCenter(location);
     popupLocationOnMap(location);
   })
-  .catch(error => {
+  .catch((error) => {
     console.error(error);
     alert("Failed to find location: " + error);
   });
 
-
 // Function to initializes the button for finding empty stations.(It is called in the end of intMap)
 function initializeFindEmptyStationButton() {
   // Getting the button element by its ID.
-  const findEmptyStationButton = document.getElementById('findEmptyStationButton');
+  const findEmptyStationButton = document.getElementById(
+    "findEmptyStationButton"
+  );
 
   // Adding a click event listener to the button.
-  findEmptyStationButton.addEventListener('click', function () {
+  findEmptyStationButton.addEventListener("click", function () {
     const mapCenter = map.getCenter();
 
     // call the function to find the closest station with available stands.
-    const closestStationWithStands = findClosestStationWithAvailableStands(mapCenter.toJSON(), availabilityActual);
+    const closestStationWithStands = findClosestStationWithAvailableStands(
+      mapCenter.toJSON(),
+      availabilityActual
+    );
 
     // Updating the global variable with the closest station.
     globalClosestStation = closestStationWithStands;
@@ -588,15 +620,20 @@ function findClosestStationWithAvailableStands(location, availabilityActual) {
   // Initialize the closest station with stands as null.
   let closestStationWithStands = null;
 
-  
   bikeStations.forEach((station, i) => {
     // Checking if the current station has available bike stands.
     if (availabilityActual[i].available_bike_stands > 0) {
       // Creating a new LatLng object for the station's location.
-      const stationLocation = new google.maps.LatLng({ lat: station.position_lat, lng: station.position_lng });
-      
+      const stationLocation = new google.maps.LatLng({
+        lat: station.position_lat,
+        lng: station.position_lng,
+      });
+
       // Calculating the distance from the given location to the station's location.
-      const distance = google.maps.geometry.spherical.computeDistanceBetween(new google.maps.LatLng(location), stationLocation);
+      const distance = google.maps.geometry.spherical.computeDistanceBetween(
+        new google.maps.LatLng(location),
+        stationLocation
+      );
 
       // Updating the closest station if a closer one is found.
       if (distance < shortestDistance) {
@@ -611,7 +648,7 @@ function findClosestStationWithAvailableStands(location, availabilityActual) {
     // Creating an object for the closest station's coordinates.
     const closestStationWithStandsCoords = {
       lat: closestStationWithStands.position_lat,
-      lng: closestStationWithStands.position_lng
+      lng: closestStationWithStands.position_lng,
     };
 
     // Setting the found station as a global variable.
