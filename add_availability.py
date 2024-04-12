@@ -81,12 +81,6 @@ def main():
 
 
 def event_log(event):
-    """
-    Event log for errors etc.
-    """
-
-
-def event_log(event):
     curr = datetime.datetime.utcnow()
     event_str = (
         "Event \t"
