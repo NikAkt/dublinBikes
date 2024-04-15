@@ -209,9 +209,8 @@ async function initMap() {
           "/availability_by_hour/" + stationId,
           function (data) {
             var availabilityData = data.availability;
-            console.log("1", availabilityData);
             var chartData = [["Hour", "Bikes Available"]];
-            for (var i = 0; i < availabilityData.length; i++) {
+            for (var i = 1; i < availabilityData.length; i++) {
               // Convert hour values to numbers
               var hour = parseInt(
                 availabilityData[i].hour_start.substring(0, 2)
@@ -259,7 +258,7 @@ async function initMap() {
           var availabilityData = data.availability;
 
           var chartData = [["Hour", " Available"]];
-          for (var i = 0; i < availabilityData.length; i++) {
+          for (var i = 1; i < availabilityData.length; i++) {
             // Convert hour values to numbers
             var hour = parseInt(availabilityData[i].hour_start.substring(0, 2));
             chartData.push([
