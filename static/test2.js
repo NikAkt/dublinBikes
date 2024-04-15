@@ -209,7 +209,7 @@ async function initMap() {
           "/availability_by_hour/" + stationId,
           function (data) {
             var availabilityData = data.availability;
-
+            console.log("1", availabilityData);
             var chartData = [["Hour", "Bikes Available"]];
             for (var i = 0; i < availabilityData.length; i++) {
               // Convert hour values to numbers
