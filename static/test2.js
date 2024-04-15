@@ -120,7 +120,7 @@ async function initMap() {
         drawBasic2(endStationNumber);
         let dateInputValue = document.getElementById("dateInput").value;
         console.log(dateInputValue);
-        fetch("http://localhost:8080/predict", {
+        fetch("http://13.48.147.216/predict", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
