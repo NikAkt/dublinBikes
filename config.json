@@ -1,9 +1,0 @@
-{
-    "dbuser": "admin",
-    "dbpass": "widzEh-kuwriz-0menki",
-    "dburl": "se-database.cjm0yeew4eja.eu-north-1.rds.amazonaws.com",
-    "dbport": "3306",
-    "db":"dbikes",
-    "bike_api_key": "626c8de20316723c1526eed9a83479c9dd13f945",
-    "weather_api_key": "43aeecf5b252d71ca98d7f4dd8aaee24"
-}
