@@ -1,6 +1,6 @@
-# Dublin Bikes
+# dublinBikes
 
-This application provides real-time information about Dublin Bikes stations, including availability of bikes and stands, and weather forecasts. It uses a K-Nearest Neighbors (KNN) machine learning model to provide predictions for bike availability per station.
+This application provides real-time information about Dublin Bikes stations, including the availability of bikes and stands, and weather forecasts. It uses a K-Nearest Neighbors (KNN) machine learning model to provide predictions for bike availability per station.
 
 ## Structure
 
